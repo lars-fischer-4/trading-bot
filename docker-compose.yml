@@ -1,0 +1,25 @@
+services:
+  freqtrade:
+    image: freqtradeorg/freqtrade:stable
+    container_name: freqtrade
+    restart: unless-stopped
+    volumes:
+      - ./user_data:/freqtrade/user_data
+    environment:
+      # Geheimnisse kommen aus der Datei .env (liegt nur auf dem Pi, nie im Repo)
+      FREQTRADE__TELEGRAM__TOKEN: ${TELEGRAM_TOKEN}
+      FREQTRADE__TELEGRAM__CHAT_ID: ${TELEGRAM_CHAT_ID}
+      FREQTRADE__EXCHANGE__KEY: ${EXCHANGE_KEY:-}
+      FREQTRADE__EXCHANGE__SECRET: ${EXCHANGE_SECRET:-}
+      TZ: Europe/Zurich
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/freqtrade.log
+      --db-url sqlite:////freqtrade/user_data/tradesv3.dryrun.sqlite
+      --config /freqtrade/user_data/config.json
+      --strategy TrendFollowV1

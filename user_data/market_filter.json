@@ -1,0 +1,28 @@
+{
+  "_hinweis": "Zeiten in UTC. Termine bitte jaehrlich ergaenzen: FOMC https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm, CPI https://www.bls.gov/schedule/news_release/cpi.htm",
+  "fear_greed_max_entry": 85,
+  "event_blackout_hours_before": 12,
+  "event_blackout_hours_after": 2,
+  "events": [
+    {"name": "US-Inflation (CPI)", "time": "2026-10-14T12:30:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2026-10-28T18:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2026-12-09T19:00:00Z"},
+    {"name": "US-Inflation (CPI)", "time": "2026-12-10T13:30:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-01-27T19:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-03-17T18:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-04-28T18:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-06-09T18:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-07-28T18:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-09-15T18:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-10-27T18:00:00Z"},
+    {"name": "US-Zinsentscheid (FOMC)", "time": "2027-12-08T19:00:00Z"}
+  ],
+  "news_feeds": [
+    {"name": "CoinDesk", "url": "https://www.coindesk.com/arc/outboundfeeds/rss/"},
+    {"name": "Cointelegraph", "url": "https://cointelegraph.com/rss"}
+  ],
+  "news_keywords": [
+    "hack", "exploit", "stolen", "SEC", "ETF", "Fed ", "FOMC", "interest rate", "inflation",
+    "ban", "crash", "liquidat", "regulat", "stablecoin", "depeg", "Bitvavo", "Kraken", "Binance"
+  ]
+}
