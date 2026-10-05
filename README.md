@@ -75,11 +75,23 @@ Voraussetzung: Docker ist installiert, und `~/trading-bot/.env` enthält `TELEGR
    docker compose logs -f   # Ausgabe ansehen, beenden mit Ctrl+C (Bot läuft weiter)
    ```
 
+5. Automatische Updates einschalten (der Pi holt alle 5 Minuten neuen Code von GitHub, startet den Bot neu und meldet es per Telegram):
+
+   ```bash
+   sudo cp ~/trading-bot/deploy/trading-bot-update.service ~/trading-bot/deploy/trading-bot-update.timer /etc/systemd/system/
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now trading-bot-update.timer
+   ```
+
+   Sicherung: Eine Version, die auf Echtgeld umschaltet (`"dry_run": false`), wird nur eingespielt, wenn auf dem Pi die Datei `~/trading-bot/LIVE_OK` existiert. Sonst kommt nur eine Warnung per Telegram.
+
 ## Alltag
+
 
 ```bash
 cd ~/trading-bot
-git pull && docker compose up -d --force-recreate   # neue Version einspielen
+deploy/auto-update.sh                                # Update sofort statt in 5 Minuten
+journalctl -u trading-bot-update --since today       # Update-Protokoll
 docker compose restart                               # neu starten
 docker compose down                                  # Bot stoppen
 rm user_data/HALT                                    # nach Gesamtverlust-Stopp wieder freigeben
