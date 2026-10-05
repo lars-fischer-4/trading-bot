@@ -21,7 +21,7 @@ jobs:
       - name: Download candles
         run: |
           PAIRS=$(tail -1 pairs.txt)
-          freqtrade download-data --config user_data/config.json --userdir user_data --exchange bitvavo --pairs $PAIRS -t 5m --timerange 20260101- --data-format-ohlcv feather || true
+          freqtrade download-data --config user_data/config.json --userdir user_data --exchange bitvavo --pairs $PAIRS -t 5m --timerange 20250101- --data-format-ohlcv feather || true
           freqtrade download-data --config user_data/config.json --userdir user_data --exchange bitvavo --pairs $PAIRS -t 1h --timerange 20250101- --data-format-ohlcv feather || true
           ls user_data/data/bitvavo | wc -l; du -sh user_data/data/bitvavo
           cp pairs.json user_data/data/bitvavo/
