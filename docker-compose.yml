@@ -22,4 +22,4 @@ services:
       --logfile /freqtrade/user_data/logs/freqtrade.log
       --db-url sqlite:////freqtrade/user_data/tradesv3.dryrun.sqlite
       --config /freqtrade/user_data/config.json
-      --strategy TrendFollowV1
+      --strategy TrendFollowV2

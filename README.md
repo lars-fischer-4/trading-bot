@@ -2,9 +2,21 @@
 
 Krypto-Bot auf Basis von [Freqtrade](https://www.freqtrade.io), läuft in Docker auf dem Pi und meldet sich per Telegram.
 
-- **Strategie:** `TrendFollowV1`, Trendfolge auf BTC/EUR und ETH/EUR mit 4-Stunden-Kerzen
+- **Strategie:** `TrendFollowV2` auf BTC/EUR und ETH/EUR mit 4-Stunden-Kerzen: kaufen, wenn der Kurs mehr als 2 % über den 50-Tage-Durchschnitt steigt, verkaufen, wenn er mehr als 2 % darunter fällt
 - **Börse:** Bitvavo (wechselbar in `user_data/config.json`)
 - **Modus:** Spielgeld (`"dry_run": true`) mit 50 EUR Startkapital
+
+## Backtest
+
+Bitvavo-Kurse, 0.25 % Gebühr, Einsatz und Schutzregeln wie in `config.json` (Gewinn in % der 50 EUR):
+
+| Zeitraum | TrendFollowV2 | TrendFollowV1 (alt) | Kaufen und halten, gleicher Einsatz |
+| --- | --- | --- | --- |
+| 07.2023 bis 06.2025 (Entwicklung) | +36 % | −14 % | +50 % |
+| 07.2025 bis 10.2026 (unabhängige Prüfung) | +20 % | +1 % | −1 % |
+| gesamt | +56 % | −13 % | +42 % |
+
+Grösster Rückgang mit V2: rund 6 %. Auch 16 Varianten mit 40 bis 75 Tagen und 1 bis 4 % Band waren in beiden Zeiträumen im Plus, das Ergebnis hängt also nicht an genau diesen Zahlen.
 
 ## Risikoregeln
 
@@ -13,7 +25,7 @@ Krypto-Bot auf Basis von [Freqtrade](https://www.freqtrade.io), läuft in Docker
 | Einsatz pro Trade | 10 EUR (20 % von 50) | `config.json`: `stake_amount` |
 | Gleichzeitige Positionen | max. 2 | `config.json`: `max_open_trades` |
 | Kapital, das der Bot nutzen darf | 50 EUR, auch wenn mehr auf dem Konto liegt | `config.json`: `available_capital` |
-| Stop-Loss | 8 % pro Position, ab 8 % Gewinn nachgezogen (4 % Abstand) | Strategie |
+| Stop-Loss | 8 % pro Position | Strategie |
 | Tagesverlust-Limit | mehr als 3 % Verlust in 24 h, dann 24 h keine Käufe | Strategie, `MaxDrawdown` |
 | Pech-Serie | 2 Stop-Losses in 2 Tagen, dann 2 Tage Pause | Strategie, `StoplossGuard` |
 | Gesamtverlust-Limit | ab 15 % Verlust: Datei `user_data/HALT`, keine Käufe mehr bis zur Freigabe | Strategie |
@@ -65,7 +77,7 @@ Voraussetzung: Docker ist installiert, und `~/trading-bot/.env` enthält `TELEGR
 
    ```bash
    docker compose run --rm freqtrade download-data --config /freqtrade/user_data/config.json -t 4h --timerange 20230101-
-   docker compose run --rm freqtrade backtesting --config /freqtrade/user_data/config.json --strategy TrendFollowV1 --timerange 20230701-
+   docker compose run --rm freqtrade backtesting --config /freqtrade/user_data/config.json --strategy TrendFollowV2 --timerange 20230701-
    ```
 
 4. Bot im Spielgeld-Modus starten:
