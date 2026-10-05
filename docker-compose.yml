@@ -23,3 +23,32 @@ services:
       --db-url sqlite:////freqtrade/user_data/tradesv3.dryrun.sqlite
       --config /freqtrade/user_data/config.json
       --strategy TrendFollowV2
+
+  # Zweiter Bot: aktiver Daytrader, nur Spielgeld. Meldet Kaeufe und Verkaeufe per Telegram,
+  # nimmt aber keine Befehle an (die gehen an den Haupt-Bot oben).
+  daytrader:
+    image: freqtradeorg/freqtrade:stable
+    container_name: daytrader
+    restart: unless-stopped
+    volumes:
+      - ./user_data:/freqtrade/user_data
+    environment:
+      FREQTRADE__WEBHOOK__URL: https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage
+      FREQTRADE__WEBHOOK__ENTRY_FILL__CHAT_ID: ${TELEGRAM_CHAT_ID}
+      FREQTRADE__WEBHOOK__EXIT_FILL__CHAT_ID: ${TELEGRAM_CHAT_ID}
+      FREQTRADE__WEBHOOK__STATUS__CHAT_ID: ${TELEGRAM_CHAT_ID}
+      FREQTRADE__WEBHOOK__STRATEGY_MSG__CHAT_ID: ${TELEGRAM_CHAT_ID}
+      FREQTRADE__WEBHOOK__PROTECTION_TRIGGER_GLOBAL__CHAT_ID: ${TELEGRAM_CHAT_ID}
+      TZ: Europe/Zurich
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/daytrader.log
+      --db-url sqlite:////freqtrade/user_data/daytrader.dryrun.sqlite
+      --config /freqtrade/user_data/config.json
+      --config /freqtrade/user_data/config-daytrader.json
+      --strategy DayTraderV1

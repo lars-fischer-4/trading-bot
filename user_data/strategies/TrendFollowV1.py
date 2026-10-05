@@ -65,6 +65,7 @@ class TrendFollowV1(IStrategy):
     max_total_loss = 0.15
     news_interval = timedelta(minutes=60)
     daily_report_hour = 21  # Uhrzeit (Schweiz) fuer den Tagesbericht
+    report_title = "Tagesbericht"
 
     @property
     def protections(self):
@@ -199,7 +200,7 @@ class TrendFollowV1(IStrategy):
         closed = Trade.get_total_closed_profit()
         fg, fg_label = self.market.fear_greed()
         lines = [
-            f"Tagesbericht {local:%d.%m.%Y}",
+            f"{self.report_title} {local:%d.%m.%Y}",
             f"Modus: {'SPIELGELD' if self.config.get('dry_run') else 'ECHTGELD'}",
             f"Abgeschlossener Gewinn/Verlust gesamt: {closed:+.2f} {currency}",
             f"Offene Positionen: {len(open_trades)}",

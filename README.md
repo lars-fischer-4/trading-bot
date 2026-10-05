@@ -34,6 +34,12 @@ Grösster Rückgang mit V2: rund 6 %. Auch 16 Varianten mit 40 bis 75 Tagen und 
 
 News- und Terminfilter gelten nur im Spielgeld- und Echtbetrieb. Im Backtest wird die reine Strategie getestet.
 
+## Daytrader (Experiment, nur Spielgeld)
+
+Ein zweiter Bot `DayTraderV1` handelt auf 5-Minuten-Kerzen die 40 umsatzstärksten Bitvavo-Coins. Er kauft kurze Rücksetzer im Aufwärtstrend und starke Einbrüche und verkauft nach Ziel, Stop oder spätestens 2 bis 3 Stunden. Er hat eigene Einstellungen (`user_data/config-daytrader.json`), eine eigene Datenbank und eine eigene Notbremse (`user_data/HALT_daytrader`). Käufe und Verkäufe meldet er per Telegram, Befehle nimmt nur der Haupt-Bot an.
+
+Im Backtest über 21 Monate verliert er nach Gebühren (−80 %, Details in [docs/daytrading-research.md](docs/daytrading-research.md)). Er läuft deshalb nur als Live-Experiment mit Spielgeld.
+
 ## Telegram
 
 Automatisch: jeder Kauf und Verkauf, ausgelöste Schutzregeln, Fehler, wichtige Schlagzeilen (stündlich geprüft) und um 21:00 ein Tagesbericht.
