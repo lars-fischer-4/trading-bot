@@ -1,0 +1,12 @@
+# Echtgeld-Zusatz. Wird nur benutzt, wenn deploy/live.sh start ihn in .env eintraegt
+# (COMPOSE_FILE=docker-compose.yml:docker-compose.live.yml). Eigene Datenbank, damit
+# Spielgeld- und Echtgeld-Trades nie gemischt werden.
+services:
+  freqtrade:
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/freqtrade.log
+      --db-url sqlite:////freqtrade/user_data/tradesv3.live.sqlite
+      --config /freqtrade/user_data/config.json
+      --config /freqtrade/user_data/config.live.json
+      --strategy ComboV1

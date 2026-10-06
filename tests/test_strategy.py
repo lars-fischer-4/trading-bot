@@ -1,3 +1,6 @@
+from datetime import UTC, datetime
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -134,3 +137,20 @@ def test_report_sums_periods(tmp_path, monkeypatch):
     assert "Kontostand: 60.00 EUR (+20.0% seit Start)" in text
     assert "Heute: +1.00 EUR, 1 Trades" in text
     assert "Woche +3.00 | Monat +6.00 | Quartal +10.00 | Gesamt +10.00" in text
+
+
+def test_status_marks_real_money(tmp_path, monkeypatch):
+    s = live_strategy(tmp_path, monkeypatch)
+    now = datetime(2026, 11, 5, 9, 0, tzinfo=UTC)
+    assert s.build_status(now).startswith("Status 10:00: 50.00 EUR")
+    s.config["dry_run"] = False
+    assert s.build_status(now).startswith("Status ECHTGELD 10:00:")
+    assert "ECHTGELD" in s.build_report(now)
+
+
+def test_live_files_never_switch_repo_to_real_money():
+    root = Path(__file__).resolve().parent.parent
+    # Echtgeld wird nur lokal auf dem Pi eingeschaltet (deploy/live.sh), nie ueber das Repo
+    assert "user_data/config.live.json" in (root / ".gitignore").read_text()
+    assert not (root / "user_data/config.live.json").exists()
+    assert "config.live.json" in (root / "docker-compose.live.yml").read_text()
