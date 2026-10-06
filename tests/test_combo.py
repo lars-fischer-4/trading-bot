@@ -162,7 +162,21 @@ def test_stake_share_of_balance():
     s = strategy(None)
     s.wallets = type("W", (), {"get_total_stake_amount": lambda self: 60.0})()
     now = datetime(2026, 1, 1, tzinfo=UTC)
+    # beide Trend-Coins im Trend: je die Haelfte
+    s.dp.analyzed = pd.DataFrame({"trend_on": [True]})
     assert s.custom_stake_amount("BTC/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "trend", "long") == 30.0
     assert s.custom_stake_amount("SOL/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "crash", "long") == 21.0
     # nie mehr als frei verfuegbar
     assert s.custom_stake_amount("BTC/EUR", now, 1.0, 10.0, 5.0, 20.0, 1.0, "trend", "long") == 20.0
+
+
+def test_single_trend_coin_uses_free_capital():
+    s = strategy(None)
+    s.wallets = type("W", (), {"get_total_stake_amount": lambda self: 60.0})()
+    now = datetime(2026, 1, 1, tzinfo=UTC)
+    # nur ein Coin im Trend: der ganze freie Betrag statt nur die Haelfte
+    s.dp.analyzed = pd.DataFrame({"trend_on": [False]})
+    assert s._trend_coins_on() == 0
+    assert s.custom_stake_amount("BTC/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "trend", "long") == 60.0
+    # Crash-Kaeufe bleiben bei ihrem Anteil
+    assert s.custom_stake_amount("SOL/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "crash", "long") == 21.0

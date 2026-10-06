@@ -56,7 +56,12 @@ class ComboV1(TrendFollowV1):
     # Einsatz als Anteil am aktuellen Kontostand (waechst mit Gewinnen mit); None = stake_amount aus config
     # Backtest 01.2025-10.2026: 50 % / 35 % brachte 50 -> 153 bei 15 % groesstem Rueckgang,
     # 10 EUR fest (vorher) +67 % bei 9 % (docs/daytrading-research.md)
+    # Trendkauf nimmt den ganzen freien Betrag, solange nur ein Coin im Trend ist (meistens der Fall),
+    # und die Haelfte, wenn BTC und ETH gleichzeitig im Trend sind.
+    # Backtest 01.2025-10.2026: 50 -> 168 statt 153, Durchschnitt 30 Tage +7.0 % statt +5.9 %,
+    # groesster Rueckgang 18 % statt 15 % (docs/daytrading-research.md)
     trend_stake: float | None = 0.50
+    trend_stake_solo: float | None = 1.00
     crash_stake: float | None = 0.35
 
     @property
@@ -134,10 +139,22 @@ class ComboV1(TrendFollowV1):
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float, proposed_stake: float,
                             min_stake: float | None, max_stake: float, leverage: float, entry_tag: str | None,
                             side: str, **kwargs) -> float:
-        share = self.trend_stake if entry_tag == "trend" else self.crash_stake
+        if entry_tag == "trend":
+            share = self.trend_stake_solo if self._trend_coins_on() <= 1 else self.trend_stake
+        else:
+            share = self.crash_stake
         if share is None:
             return proposed_stake
         return min(max_stake, self.wallets.get_total_stake_amount() * share)
+
+    def _trend_coins_on(self) -> int:
+        """Wie viele der Trend-Coins (BTC, ETH) gerade im Trend sind."""
+        on = 0
+        for p in self.trend_pairs:
+            df, _ = self.dp.get_analyzed_dataframe(p, self.timeframe)
+            if df is not None and len(df) and "trend_on" in df and bool(df["trend_on"].iloc[-1]):
+                on += 1
+        return on
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float, time_in_force: str,
                             current_time: datetime, entry_tag: str | None, side: str, **kwargs) -> bool:

@@ -159,3 +159,41 @@ Ausgehend von 50 % / 25 % (50 → 127), je eine Änderung:
 | **Crash 35 % und Trend-Stop 12 bis 15 %** | **153** | **+98 %** | **+54 %** | **15 %** |
 
 Übernommen: Crash-Käufe 35 %, Trend-Stop 12 % (12 und 15 % ergaben dasselbe). Der 250er Schnitt war nur 2026 besser und bleibt deshalb bei 300.
+
+### Dritte Runde (6. Oktober 2026, Abend)
+
+Ausgehend von ComboV1 mit 50 % / 35 % (50 → 153). Zuerst Filter für die Abprall-Käufe:
+
+| Änderung | Ende | 2025 | 2026 | grösster Rückgang |
+| --- | --- | --- | --- | --- |
+| nur wenn BTC *nicht* im Trend ist | 145 | +88 % | +54 % | 16 % |
+| Ziel +6 % statt +8 % | 142 | +91 % | +49 % | 15 % |
+| Ziel +10 % | 141 | +92 % | +47 % | 17 % |
+| Crash-Einsatz 45 % | 131 | +67 % | +58 % | 15 % |
+| spätestens nach 8 h raus statt 4 h | 126 | +91 % | +32 % | 23 % |
+| spätestens nach 2 h raus | 124 | +65 % | +51 % | 15 % |
+| Schwelle 8 % statt 7 % | 123 | +72 % | +43 % | 17 % |
+| nur marktweite Einbrüche (BTC fällt mit) | 114 | +50 % | +52 % | 23 % |
+| nur Einzel-Einbrüche (BTC ruhig) | 113 | +72 % | +31 % | 18 % |
+| Schwelle 6 % statt 7 % | 102 | +58 % | +29 % | 30 % |
+| nur wenn BTC im Trend ist | 92 | +43 % | +28 % | 24 % |
+| Schwelle nach Schwankung des Coins (2.5 / 3.5 σ) | 51 / 70 | | | 47 / 36 % |
+
+Kein Filter hilft: Die Abprall-Käufe bleiben wie sie sind (7 %, Ziel 8 %, 4 h, 35 %).
+
+Dann die Einsatzgrösse. Beobachtung: BTC und ETH sind fast nie gleichzeitig im Trend, also liegt
+meistens die Hälfte des Geldes ungenutzt herum.
+
+| Änderung | Ende | 2025 | 2026 | 30 Tage Schnitt | grösster Rückgang |
+| --- | --- | --- | --- | --- | --- |
+| **ganzer freier Betrag, wenn nur ein Coin im Trend ist** | **168** | **+107 %** | **+62 %** | **+7.0 %** | **18 %** |
+| Trend-Einsatz 70 % statt 50 % | 162 | +102 % | +61 % | +6.4 % | 17 % |
+| Trend-Einsatz 60 % | 160 | +103 % | +57 % | +6.3 % | 15 % |
+| ganzer Betrag, aber nur 3 Positionen gleichzeitig | 160 | +98 % | +62 % | +6.8 % | 18 % |
+| bisher (50 % / 35 %) | 153 | +98 % | +54 % | +5.9 % | 15 % |
+| ganzer Betrag, Crash 25 % | 152 | +94 % | +57 % | +6.5 % | 19 % |
+| ganzer Betrag, Crash 45 % | 141 | +70 % | +65 % | +6.0 % | 20 % |
+
+Übernommen: Ist nur einer der beiden Trend-Coins im Trend, bekommt er den ganzen freien Betrag;
+sind beide im Trend, je 50 %. Ob der zweite Anteil 50, 60 oder 70 % ist, spielt keine Rolle –
+der Fall tritt im Test nie ein. Dafür steigt der grösste Rückgang von 15 auf 18 %.
