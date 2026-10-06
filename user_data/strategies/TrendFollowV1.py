@@ -293,7 +293,8 @@ class TrendFollowV1(IStrategy):
         line2 = "Offen: " + (", ".join(parts) if parts else "nichts, wartet auf Signal")
         if self.halt_file.exists():
             line2 += " | Notbremse aktiv"
-        return (f"Status {local:%H:%M}: {equity:.2f} {cur} ({(equity / start - 1) if start else 0:+.1%}), "
+        mode = "" if self.config.get("dry_run", True) else " ECHTGELD"
+        return (f"Status{mode} {local:%H:%M}: {equity:.2f} {cur} ({(equity / start - 1) if start else 0:+.1%}), "
                 f"heute {today:+.2f}\n{line2}")
 
     def _send_status(self, now: datetime) -> None:

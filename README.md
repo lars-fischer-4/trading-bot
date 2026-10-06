@@ -122,11 +122,7 @@ Die Termine in `user_data/market_filter.json` reichen bis Ende 2027 (US-Inflatio
 
 ## Echtgeld (erst nach Freigabe)
 
-Erst wenn Backtest und mehrere Wochen Spielgeld überzeugen:
-
-1. Bei der Börse einen API-Schlüssel **nur mit Lese- und Handelsrecht, ohne Auszahlung** erstellen, wenn möglich auf die eigene IP beschränkt.
-2. `EXCHANGE_KEY` und `EXCHANGE_SECRET` in `~/trading-bot/.env` auf dem Pi eintragen (nie ins Repo).
-3. In `user_data/config.json` `"dry_run": false` setzen und in `docker-compose.yml` die Datenbank auf `tradesv3.sqlite` ändern.
+Vorbereitet, aber nicht aktiv. Anleitung: [docs/echtgeld.md](docs/echtgeld.md). Kurz: API-Schlüssel ohne Auszahlungsrecht in `~/trading-bot/.env` eintragen, `deploy/live.sh check`, dann `deploy/live.sh start`. Zurück mit `deploy/live.sh stop`.
 
 ## Entwicklung
 

@@ -13,3 +13,4 @@ user_data/seen_news.json
 LIVE_OK
 .blocked_rev
 .restart_count
+user_data/config.live.json
