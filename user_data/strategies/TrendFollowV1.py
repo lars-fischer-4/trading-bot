@@ -159,7 +159,11 @@ class TrendFollowV1(IStrategy):
         reason = self.market.entry_block_reason(current_time)
         if reason:
             logger.info("Kauf %s abgelehnt: %s", pair, reason)
-            self.dp.send_msg(f"Kaufsignal {pair} ignoriert: {reason}")
+            # hoechstens einmal pro Stunde und Coin melden, das Signal kommt alle paar Sekunden wieder
+            last = getattr(self, "_block_msgs", {}).get(pair)
+            if last is None or current_time - last >= timedelta(hours=1):
+                self._block_msgs = {**getattr(self, "_block_msgs", {}), pair: current_time}
+                self.dp.send_msg(f"Kaufsignal {pair} ignoriert: {reason}")
             return False
         return True
 

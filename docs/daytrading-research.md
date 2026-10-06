@@ -121,3 +121,22 @@ Ganzes Kapital investiert, 0.25 % Gebühr pro Kauf oder Verkauf, 20.01.2025 bis 
 Keiner der Ansätze schlägt ComboV1, und alle schwanken deutlich stärker. Der Stunden-Effekt verschwindet nach Gebühren vollständig.
 
 Trendteil von ComboV1 mit längerer Historie (BTC und ETH, 4h-Kerzen seit März 2023, `research/trend_variants.py`): Der 50-Tage-Schnitt mit 2-%-Band ist in jedem Jahr unter den besten (2024 +52 %, 2025 +29 %, 2026 +28 %). Schnellere Schnitte oder EMA-Kreuzungen sind in mindestens einem Jahr deutlich schlechter. Die aktuelle Einstellung bleibt.
+
+## Nachtrag: Optimierung von ComboV1 (6. Oktober 2026)
+
+Ziel von Lars: aus 50 in 30 Tagen mindestens 55, etwas mehr Risiko ist in Ordnung. Freqtrade-Backtest, 10 Coins, 20.01.2025 bis 05.10.2026, Kontostand inklusive offener Positionen.
+
+1. **Fehler gefunden:** Der Trendteil kaufte nur im Moment, in dem ein Trend begann. Ein Bot, der mitten in einem Trend startet (wie nach dem Umzug auf den Pi), blieb bis zum nächsten Trend draussen. In den 2 Wochen vor dem Test: 50.00 → 50.07, obwohl BTC und ETH im Aufwärtstrend waren. Jetzt kauft er, solange der Trend gilt; nach einem Stop-Loss erst beim nächsten Trend. Ergebnis mit 10 EUR fest: +67 % statt +51 %.
+2. **Crash-Parameter** (Schwelle 5 bis 10 %, Ziel 5 bis 12 %, Stop 5 bis 12 %, Haltedauer 2 bis 24 h), Trend-Stop 5 bis 12 %, ohne Schutzregeln, mehr Positionen: Die bisherigen Werte sind in beiden Jahren unter den besten, keine Änderung.
+3. **Trend auch auf Altcoins** (4 oder 10 Coins): mehr Rückgang (25 bis 32 %), nicht mehr Gewinn.
+4. **Einsatz als Anteil am Kontostand:**
+
+| Trend / Crash | Ende (Start 50) | 2025 | 2026 | 30 Tage Schnitt | 30 Tage ≥ +10 % | grösster Rückgang |
+| --- | --- | --- | --- | --- | --- | --- |
+| 10 EUR fest | 84 | +46 % | +15 % | +2.6 % | 11 % | 9 % |
+| 30 % / 15 % | 86 | +42 % | +22 % | +2.8 % | 15 % | 14 % |
+| 40 % / 20 % | 105 | +63 % | +30 % | +3.9 % | 22 % | 15 % |
+| 45 % / 25 % | 122 | +75 % | +39 % | +4.7 % | 24 % | 16 % |
+| **50 % / 25 %** | **127** | **+80 %** | **+41 %** | **+5.0 %** | **24 %** | **17 %** |
+
+Gewählt: 50 % / 25 %. Monate reichen von −8 % bis +25 %; etwa jeder dritte 30-Tage-Zeitraum endet im Minus. +10 % in jedem Monat schafft keine Variante.
