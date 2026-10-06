@@ -34,7 +34,8 @@ Das Skript prüft noch einmal Schlüssel und Guthaben und will `JA` als Bestäti
 - Der Bot nutzt eine eigene Datenbank (`tradesv3.live.sqlite`). Spielgeld-Trades zählen nicht mit.
 - Status und Tagesbericht tragen den Vermerk ECHTGELD.
 - Automatische Updates laufen weiter und bleiben im Echtgeld-Modus.
-- Kauft er im laufenden Trend, investiert er sofort je 50 % in BTC und ETH.
+- Läuft gerade ein Trend bei BTC oder ETH, kauft er sofort mit dem ganzen freien Betrag (sind beide im Trend, je die Hälfte).
+- Die Weboberfläche (http://tradingpi.local:8080) zeigt dann echtes Geld; Knöpfe wie „Verkaufen“ handeln echt.
 
 ## Notbremse
 
