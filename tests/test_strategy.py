@@ -60,7 +60,7 @@ class FakeDP:
         self.sent.append(msg)
 
 
-def live_strategy(tmp_path, monkeypatch, closed_profit=0.0):
+def live_strategy(tmp_path, monkeypatch, closed_profit=0.0, closed_trades=None):
     import TrendFollowV1 as mod
 
     s = TrendFollowV1({"user_data_dir": tmp_path, "stake_currency": "EUR", "dry_run": True,
@@ -70,6 +70,7 @@ def live_strategy(tmp_path, monkeypatch, closed_profit=0.0):
     s.market._fg_fetched_at = float("inf")
     monkeypatch.setattr(mod.Trade, "get_total_closed_profit", staticmethod(lambda: closed_profit))
     monkeypatch.setattr(mod.Trade, "get_open_trades", staticmethod(lambda: []))
+    monkeypatch.setattr(mod.Trade, "get_trades_proxy", staticmethod(lambda **kw: closed_trades or []))
     monkeypatch.setattr(s.market, "new_headlines", lambda: [])
     return s
 
@@ -106,7 +107,7 @@ def test_daily_report_once(tmp_path, monkeypatch):
     s.bot_loop_start(datetime(2026, 11, 5, 20, 30, tzinfo=UTC))
     reports = [m for m in s.dp.sent if m.startswith("Tagesbericht")]
     assert len(reports) == 1
-    assert "SPIELGELD" in reports[0]
+    assert "Spielgeld" in reports[0]
 
 
 def test_backtest_ignores_live_filters(tmp_path, monkeypatch):
@@ -116,3 +117,20 @@ def test_backtest_ignores_live_filters(tmp_path, monkeypatch):
     s.dp = FakeDP("backtest")
     (tmp_path / "HALT").write_text("x")
     assert entry(s, datetime(2026, 11, 5, tzinfo=UTC)) is True
+
+
+def test_report_sums_periods(tmp_path, monkeypatch):
+    from datetime import UTC, datetime
+    from types import SimpleNamespace
+
+    def closed(day, profit):
+        return SimpleNamespace(close_date=datetime(2026, 11, day, 9), close_profit_abs=profit)
+
+    # Do 5.11.2026: heute +1, diese Woche (ab Mo 2.11.) +1 +2, Monat zusaetzlich +3 am 1.11., Quartal +4 im Oktober
+    trades = [closed(5, 1.0), closed(3, 2.0), closed(1, 3.0)]
+    trades.append(SimpleNamespace(close_date=datetime(2026, 10, 20, 9), close_profit_abs=4.0))
+    s = live_strategy(tmp_path, monkeypatch, closed_profit=10.0, closed_trades=trades)
+    text = s.build_report(datetime(2026, 11, 5, 20, 0, tzinfo=UTC))
+    assert "Kontostand: 60.00 EUR (+20.0% seit Start)" in text
+    assert "Heute: +1.00 EUR, 1 Trades" in text
+    assert "Woche +3.00 | Monat +6.00 | Quartal +10.00 | Gesamt +10.00" in text

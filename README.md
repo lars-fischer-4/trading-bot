@@ -2,30 +2,30 @@
 
 Krypto-Bot auf Basis von [Freqtrade](https://www.freqtrade.io), läuft in Docker auf dem Pi und meldet sich per Telegram.
 
-- **Strategie:** `TrendFollowV2` auf BTC/EUR und ETH/EUR mit 4-Stunden-Kerzen: kaufen, wenn der Kurs mehr als 2 % über den 50-Tage-Durchschnitt steigt, verkaufen, wenn er mehr als 2 % darunter fällt
+- **Strategie:** `ComboV1`, ein Bot für alles: Trendfolge auf BTC und ETH (Kauf über dem 50-Tage-Durchschnitt) und schnelle Abprall-Käufe nach Einbrüchen von mehr als 7 % in einer Stunde auf BTC, ETH, SOL und XRP. Beobachtet die Kurse alle paar Sekunden.
 - **Börse:** Bitvavo (wechselbar in `user_data/config.json`)
 - **Modus:** Spielgeld (`"dry_run": true`) mit 50 EUR Startkapital
 
 ## Backtest
 
-Bitvavo-Kurse, 0.25 % Gebühr, Einsatz und Schutzregeln wie in `config.json` (Gewinn in % der 50 EUR):
+Bitvavo-Kurse, 0.25 % Gebühr, 10 EUR pro Trade, Schutzregeln aktiv (Gewinn in % der 50 EUR):
 
-| Zeitraum | TrendFollowV2 | TrendFollowV1 (alt) | Kaufen und halten, gleicher Einsatz |
-| --- | --- | --- | --- |
-| 07.2023 bis 06.2025 (Entwicklung) | +36 % | −14 % | +50 % |
-| 07.2025 bis 10.2026 (unabhängige Prüfung) | +20 % | +1 % | −1 % |
-| gesamt | +56 % | −13 % | +42 % |
+| Zeitraum | ComboV1 | Markt (BTC, ETH, SOL, XRP) |
+| --- | --- | --- |
+| 20.01.2025 bis 31.12.2025 | +18 % | −36 % |
+| 01.01.2026 bis 05.10.2026 | +16 % | −3 % |
+| gesamt | +35 %, grösster Rückgang 7 % | −38 % |
 
-Grösster Rückgang mit V2: rund 6 %. Auch 16 Varianten mit 40 bis 75 Tagen und 1 bis 4 % Band waren in beiden Zeiträumen im Plus, das Ergebnis hängt also nicht an genau diesen Zahlen.
+51 Trades in 20 Monaten: 18 Trend-Trades (+6.8 % im Schnitt) und 33 Abprall-Käufe (+1.6 % im Schnitt). Im Ergebnis für 2026 stecken 16 % aus zwei Trend-Positionen, die am Ende des Tests noch offen waren. Kurze Rücksetzer-Käufe, Scalping und kleine Coins verlieren nach Gebühren und sind deshalb nicht drin ([docs/daytrading-research.md](docs/daytrading-research.md)).
 
 ## Risikoregeln
 
 | Regel | Wert | Wo |
 | --- | --- | --- |
 | Einsatz pro Trade | 10 EUR (20 % von 50) | `config.json`: `stake_amount` |
-| Gleichzeitige Positionen | max. 2 | `config.json`: `max_open_trades` |
+| Gleichzeitige Positionen | max. 4 | `config.json`: `max_open_trades` |
 | Kapital, das der Bot nutzen darf | 50 EUR, auch wenn mehr auf dem Konto liegt | `config.json`: `available_capital` |
-| Stop-Loss | 8 % pro Position | Strategie |
+| Stop-Loss | 8 % pro Position, fest ab Einstieg | Strategie |
 | Tagesverlust-Limit | mehr als 3 % Verlust in 24 h, dann 24 h keine Käufe | Strategie, `MaxDrawdown` |
 | Pech-Serie | 2 Stop-Losses in 2 Tagen, dann 2 Tage Pause | Strategie, `StoplossGuard` |
 | Gesamtverlust-Limit | ab 15 % Verlust: Datei `user_data/HALT`, keine Käufe mehr bis zur Freigabe | Strategie |
@@ -34,15 +34,14 @@ Grösster Rückgang mit V2: rund 6 %. Auch 16 Varianten mit 40 bis 75 Tagen und 
 
 News- und Terminfilter gelten nur im Spielgeld- und Echtbetrieb. Im Backtest wird die reine Strategie getestet.
 
-## Daytrader (Experiment, nur Spielgeld)
-
-Ein zweiter Bot `DayTraderV1` handelt auf 5-Minuten-Kerzen die 40 umsatzstärksten Bitvavo-Coins. Er kauft kurze Rücksetzer im Aufwärtstrend und starke Einbrüche und verkauft nach Ziel, Stop oder spätestens 2 bis 3 Stunden. Er hat eigene Einstellungen (`user_data/config-daytrader.json`), eine eigene Datenbank und eine eigene Notbremse (`user_data/HALT_daytrader`). Käufe und Verkäufe meldet er per Telegram, Befehle nimmt nur der Haupt-Bot an.
-
-Im Backtest über 21 Monate verliert er nach Gebühren (−80 %, Details in [docs/daytrading-research.md](docs/daytrading-research.md)). Er läuft deshalb nur als Live-Experiment mit Spielgeld.
-
 ## Telegram
 
-Automatisch: jeder Kauf und Verkauf, ausgelöste Schutzregeln, Fehler, wichtige Schlagzeilen (stündlich geprüft) und um 21:00 ein Tagesbericht.
+Automatisch:
+
+- jeder ausgeführte Kauf und Verkauf
+- alle 30 Minuten ein kurzer Status: Kontostand, Gewinn heute, offene Positionen
+- um 21:00 ein Tagesbericht: Kontostand, Gewinn heute, Woche, Monat, Quartal und gesamt, offene Positionen, Marktstimmung, nächster Wirtschaftstermin
+- ausgelöste Schutzregeln, Fehler und wichtige Schlagzeilen (stündlich geprüft)
 
 | Befehl | Wirkung |
 | --- | --- |
@@ -82,8 +81,8 @@ Voraussetzung: Docker ist installiert, und `~/trading-bot/.env` enthält `TELEGR
 3. Kursdaten laden und Backtest laufen lassen:
 
    ```bash
-   docker compose run --rm freqtrade download-data --config /freqtrade/user_data/config.json -t 4h --timerange 20230101-
-   docker compose run --rm freqtrade backtesting --config /freqtrade/user_data/config.json --strategy TrendFollowV2 --timerange 20230701-
+   docker compose run --rm freqtrade download-data --config /freqtrade/user_data/config.json -t 5m 4h --timerange 20250101-
+   docker compose run --rm freqtrade backtesting --config /freqtrade/user_data/config.json --strategy ComboV1 --timerange 20250120-
    ```
 
 4. Bot im Spielgeld-Modus starten:
