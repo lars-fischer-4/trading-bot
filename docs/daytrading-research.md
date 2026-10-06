@@ -72,3 +72,18 @@ git clone -b data-files --depth 1 https://github.com/lars-fischer-4/trading-bot.
 DATA=data python research/grid_21m.py          # alle Varianten, schreibt run8.csv
 DATA=data python research/ml_lightgbm.py       # KI-Modell
 ```
+
+## Nachtrag: Wie viele Coins? (6. Oktober 2026)
+
+ComboV1 mit den N umsatzstärksten EUR-Coins, max. 4 Positionen, 12.50 EUR pro Trade, 20.01.2025 bis 05.10.2026:
+
+| Coins | Trades | Ergebnis | grösster Rückgang |
+| --- | --- | --- | --- |
+| 4 | 51 | +44 % | 8 % |
+| 7 | 80 | +55 % | 8 % |
+| 10 | 125 | +64 % | 10 % |
+| 12 | 243 | +56 % | 15 % |
+| 20 | 307 | +6 % | 28 % |
+| 40 | 457 | −37 % | 55 % |
+
+Mit 10 Coins hält das Ergebnis in beiden Jahren (2025: +43 % statt +23 %, 2026: +19 % wie mit 4 Coins). Ab etwa 12 Coins kommen Meme-Coins dazu (MOODENG, WIF, PEPE), deren Einbrüche nicht abprallen. Der Bot nutzt deshalb die 10 grössten.
