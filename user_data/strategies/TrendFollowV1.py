@@ -66,7 +66,7 @@ class TrendFollowV1(IStrategy):
     news_interval = timedelta(minutes=60)
     daily_report_hour = 21  # Uhrzeit (Schweiz) fuer den Tagesbericht
     report_title = "Tagesbericht"
-    status_interval = timedelta(minutes=15)  # kurzer Status per Telegram
+    status_interval = timedelta(minutes=10)  # kurzer Status per Telegram
 
     @property
     def protections(self):
