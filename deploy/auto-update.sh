@@ -23,7 +23,12 @@ REMOTE=$(git rev-parse origin/main)
 [ "$LOCAL" = "$REMOTE" ] && exit 0
 
 # Echtgeld-Sperre: Code, der dry_run abschaltet, wird nur mit Freischaltung auf dem Pi uebernommen
-NEW_DRY_RUN=$(git show origin/main:user_data/config.json | python3 -c 'import json,sys; print(json.load(sys.stdin).get("dry_run", True))')
+# (prueft alle Konfigurationen, auch die des Daytraders)
+NEW_DRY_RUN=True
+for CFG in $(git ls-tree --name-only origin/main user_data/ | grep -E '^user_data/config.*\.json$'); do
+    VAL=$(git show "origin/main:$CFG" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("dry_run", True))')
+    [ "$VAL" != "True" ] && NEW_DRY_RUN=False
+done
 if [ "$NEW_DRY_RUN" != "True" ] && [ ! -f "$BOT_DIR/LIVE_OK" ]; then
     MSG="Update NICHT eingespielt: Die neue Version schaltet auf ECHTGELD. Zum Freigeben auf dem Pi: touch ~/trading-bot/LIVE_OK"
     # nur einmal pro Version melden

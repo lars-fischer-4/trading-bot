@@ -1,0 +1,35 @@
+name: Research data
+on:
+  push:
+    branches: [research-data]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install freqtrade
+      - name: Select pairs
+        run: |
+          python research/select_pairs.py 120 | tee pairs.txt
+      - name: Download candles
+        run: |
+          PAIRS=$(tail -1 pairs.txt)
+          freqtrade download-data --config user_data/config.json --userdir user_data --exchange bitvavo --pairs $PAIRS -t 5m --timerange 20250101- --data-format-ohlcv feather || true
+          freqtrade download-data --config user_data/config.json --userdir user_data --exchange bitvavo --pairs $PAIRS -t 1h --timerange 20250101- --data-format-ohlcv feather || true
+          ls user_data/data/bitvavo | wc -l; du -sh user_data/data/bitvavo
+          cp pairs.json user_data/data/bitvavo/
+      - name: Publish data to branch data-files
+        run: |
+          mkdir /tmp/pub && cp -r user_data/data/bitvavo/. /tmp/pub/
+          cd /tmp/pub
+          git init -q -b data-files
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add -A && git commit -q -m "Bitvavo candles $(date -u +%F)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" data-files
