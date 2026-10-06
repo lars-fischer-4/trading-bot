@@ -66,6 +66,7 @@ class TrendFollowV1(IStrategy):
     news_interval = timedelta(minutes=60)
     daily_report_hour = 21  # Uhrzeit (Schweiz) fuer den Tagesbericht
     report_title = "Tagesbericht"
+    status_interval = timedelta(minutes=30)  # kurzer Status per Telegram
 
     @property
     def protections(self):
@@ -97,6 +98,7 @@ class TrendFollowV1(IStrategy):
         self.market = MarketFilter(user_data / "market_filter.json", user_data / "seen_news.json")
         self._last_news = datetime.min
         self._last_report_day = None
+        self._last_status = datetime.min
         self._halt_announced = False
 
     # --- Indikatoren und Signale -----------------------------------
@@ -167,6 +169,7 @@ class TrendFollowV1(IStrategy):
         self._check_total_loss()
         self._send_news(current_time)
         self._send_daily_report(current_time)
+        self._send_status(current_time)
 
     def _check_total_loss(self) -> None:
         capital = self._starting_capital()
@@ -190,29 +193,107 @@ class TrendFollowV1(IStrategy):
         for h in self.market.new_headlines()[:5]:
             self.dp.send_msg(f"News ({h.source}): {h.title}\n{h.link}", always_send=True)
 
+    def _last_price(self, pair: str) -> float | None:
+        try:
+            df, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+            return float(df["close"].iloc[-1]) if len(df) else None
+        except Exception:
+            return None
+
+    def _period_profits(self, local: datetime) -> dict[str, float]:
+        """Abgeschlossener Gewinn seit Tagesbeginn, Wochenbeginn, Monatsbeginn, Quartalsbeginn (Schweizer Zeit)."""
+        day = local.replace(hour=0, minute=0, second=0, microsecond=0)
+        starts = {
+            "Heute": day,
+            "Woche": day - timedelta(days=day.weekday()),
+            "Monat": day.replace(day=1),
+            "Quartal": day.replace(month=(day.month - 1) // 3 * 3 + 1, day=1),
+        }
+        closed = Trade.get_trades_proxy(is_open=False)
+        out = {}
+        for name, since in starts.items():
+            since_utc = since.astimezone(ZoneInfo("UTC")).replace(tzinfo=None)
+            out[name] = sum(
+                (t.close_profit_abs or 0.0) for t in closed
+                if t.close_date and t.close_date.replace(tzinfo=None) >= since_utc
+            )
+        out["trades_today"] = sum(
+            1 for t in closed
+            if t.close_date and t.close_date.replace(tzinfo=None) >= starts["Heute"].astimezone(ZoneInfo("UTC")).replace(tzinfo=None)
+        )
+        return out
+
+    def build_report(self, now: datetime) -> str:
+        local = now.astimezone(LOCAL_TZ)
+        cur = self.config["stake_currency"]
+        start = self._starting_capital()
+        closed = Trade.get_total_closed_profit()
+        open_trades = Trade.get_open_trades()
+        unrealized = 0.0
+        open_lines = []
+        for t in open_trades:
+            price = self._last_price(t.pair)
+            pct = ""
+            if price:
+                unrealized += t.calc_profit(price)
+                pct = f" {t.calc_profit_ratio(price):+.1%}"
+            open_lines.append(f"  {t.pair} ({t.enter_tag or '-'}){pct}, seit {t.open_date:%d.%m. %H:%M}")
+        equity = start + closed + unrealized
+        p = self._period_profits(local)
+        mode = "Spielgeld" if self.config.get("dry_run") else "ECHTGELD"
+        lines = [
+            f"{self.report_title} {local:%d.%m.%Y} ({mode})",
+            f"Kontostand: {equity:.2f} {cur} ({(equity / start - 1) if start else 0:+.1%} seit Start)",
+            f"Heute: {p['Heute']:+.2f} {cur}, {p['trades_today']} Trades abgeschlossen",
+            f"Woche {p['Woche']:+.2f} | Monat {p['Monat']:+.2f} | Quartal {p['Quartal']:+.2f} | Gesamt {closed:+.2f}",
+        ]
+        lines.append(f"Offen: {len(open_trades)}" + ("" if open_trades else " (nichts investiert)"))
+        lines += open_lines
+        fg, fg_label = self.market.fear_greed()
+        events = self.market.upcoming_events(now)
+        extra = []
+        if fg is not None:
+            extra.append(f"Fear & Greed {fg}")
+        if events:
+            e = events[0]
+            extra.append(f"naechster Termin {e.time.astimezone(LOCAL_TZ):%a %d.%m. %H:%M} {e.name}")
+        if extra:
+            lines.append(" | ".join(extra))
+        if self.halt_file.exists():
+            lines.append("ACHTUNG: Notbremse aktiv, keine neuen Kaeufe.")
+        return "\n".join(lines)
+
     def _send_daily_report(self, now: datetime) -> None:
         local = now.astimezone(LOCAL_TZ)
         if local.hour != self.daily_report_hour or self._last_report_day == local.date():
             return
         self._last_report_day = local.date()
-        currency = self.config["stake_currency"]
-        open_trades = Trade.get_open_trades()
+        self.dp.send_msg(self.build_report(now), always_send=True)
+
+    def build_status(self, now: datetime) -> str:
+        local = now.astimezone(LOCAL_TZ)
+        cur = self.config["stake_currency"]
+        start = self._starting_capital()
         closed = Trade.get_total_closed_profit()
-        fg, fg_label = self.market.fear_greed()
-        lines = [
-            f"{self.report_title} {local:%d.%m.%Y}",
-            f"Modus: {'SPIELGELD' if self.config.get('dry_run') else 'ECHTGELD'}",
-            f"Abgeschlossener Gewinn/Verlust gesamt: {closed:+.2f} {currency}",
-            f"Offene Positionen: {len(open_trades)}",
-        ]
-        for t in open_trades:
-            lines.append(f"  {t.pair}: Einstieg {t.open_rate:.2f}, seit {t.open_date:%d.%m. %H:%M}")
-        if fg is not None:
-            lines.append(f"Fear & Greed: {fg} ({fg_label})")
-        events = self.market.upcoming_events(now)
-        if events:
-            lines.append("Termine naechste 7 Tage:")
-            lines += [f"  {e.time.astimezone(LOCAL_TZ):%a %d.%m. %H:%M} {e.name}" for e in events]
+        parts = []
+        unrealized = 0.0
+        for t in Trade.get_open_trades():
+            price = self._last_price(t.pair)
+            if price:
+                unrealized += t.calc_profit(price)
+                parts.append(f"{t.pair.split('/')[0]} {t.calc_profit_ratio(price):+.1%}")
+            else:
+                parts.append(t.pair.split("/")[0])
+        equity = start + closed + unrealized
+        today = self._period_profits(local)["Heute"]
+        line2 = "Offen: " + (", ".join(parts) if parts else "nichts, wartet auf Signal")
         if self.halt_file.exists():
-            lines.append("ACHTUNG: HALT aktiv, keine neuen Kaeufe.")
-        self.dp.send_msg("\n".join(lines), always_send=True)
+            line2 += " | Notbremse aktiv"
+        return (f"Status {local:%H:%M}: {equity:.2f} {cur} ({(equity / start - 1) if start else 0:+.1%}), "
+                f"heute {today:+.2f}\n{line2}")
+
+    def _send_status(self, now: datetime) -> None:
+        if now.replace(tzinfo=None) - self._last_status < self.status_interval:
+            return
+        self._last_status = now.replace(tzinfo=None)
+        self.dp.send_msg(self.build_status(now), always_send=True)
