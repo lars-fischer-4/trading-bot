@@ -41,7 +41,7 @@ News- und Terminfilter gelten nur im Spielgeld- und Echtbetrieb. Im Backtest wir
 Automatisch:
 
 - jeder ausgeführte Kauf und Verkauf
-- alle 30 Minuten ein kurzer Status: Kontostand, Gewinn heute, offene Positionen
+- alle 15 Minuten ein kurzer Status: Kontostand, Gewinn heute, offene Positionen
 - um 21:00 ein Tagesbericht: Kontostand, Gewinn heute, Woche, Monat, Quartal und gesamt, offene Positionen, Marktstimmung, nächster Wirtschaftstermin
 - ausgelöste Schutzregeln, Fehler und wichtige Schlagzeilen (stündlich geprüft)
 
