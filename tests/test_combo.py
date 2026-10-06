@@ -49,7 +49,8 @@ def run(s, df, pair):
 def big_with_breakout():
     # 4h: lange flach, dann klarer Anstieg ueber den 50-Tage-Durchschnitt
     big = candles(400, "4h", "2025-09-01")
-    big.loc[380:, "close"] = big.loc[379, "close"] * np.linspace(1.01, 1.10, 20)
+    big["close"] = 100.0
+    big.loc[380:, "close"] = 100.0 * np.linspace(1.01, 1.10, 20)
     return big
 
 
@@ -58,8 +59,44 @@ def test_trend_entry_only_for_btc_eth():
     df = candles(1500, "5min", str(big["date"].iloc[370].tz_convert(None)))
     btc = run(strategy(big), df.copy(), "BTC/EUR")
     sol = run(strategy(big), df.copy(), "SOL/EUR")
-    assert (btc["enter_tag"] == "trend").sum() == 1
+    trend = btc["enter_tag"] == "trend"
+    # Einstieg ab dem ersten 4h-Schluss ueber dem Band und danach laufend (z. B. nach Neustart)
+    assert trend.any() and not trend.iloc[:48].any() and trend.iloc[-1]
     assert not (sol["enter_tag"] == "trend").any()
+
+
+def test_trend_stays_on_inside_band():
+    big = big_with_breakout()
+    # zurueck knapp unter +2 %, aber nicht unter -2 %: Trend bleibt an
+    big = pd.concat([big, candles(10, "4h", str(big["date"].iloc[-1].tz_convert(None) + pd.Timedelta(hours=4)))])
+    big = big.reset_index(drop=True)
+    big.loc[400:, "close"] = 101.0
+    df = candles(200, "5min", str(big["date"].iloc[405].tz_convert(None)))
+    out = run(strategy(big), df, "BTC/EUR")
+    assert out["trend_on"].all() and not out["trend_up"].any()
+
+
+class FakeClosed:
+    def __init__(self, tag, reason, close):
+        self.enter_tag, self.exit_reason, self.close_date_utc = tag, reason, close
+
+
+def test_no_reentry_after_stop_in_same_trend(monkeypatch):
+    big = big_with_breakout()
+    df = candles(600, "5min", str(big["date"].iloc[385].tz_convert(None)))
+    s = strategy(big)
+    s.dp.analyzed = s.populate_indicators(df, {"pair": "BTC/EUR"})
+    since = datetime.fromtimestamp(s.dp.analyzed["trend_since"].iloc[-1], tz=UTC)
+    from freqtrade.persistence import Trade
+    closed = []
+    monkeypatch.setattr(Trade, "get_trades_proxy", staticmethod(lambda **kw: closed))
+    args = ("BTC/EUR", "limit", 1.0, 1.0, "GTC", since, "trend", "long")
+    assert s.confirm_trade_entry(*args)
+    closed.append(FakeClosed("trend", "stop_loss", since - timedelta(days=1)))  # Stop im alten Trend
+    assert s.confirm_trade_entry(*args)
+    closed.append(FakeClosed("trend", "stop_loss", since + timedelta(hours=8)))
+    assert not s.confirm_trade_entry(*args)
+    assert s.confirm_trade_entry(*args[:6], "crash", "long")
 
 
 def test_crash_entry():
@@ -119,3 +156,13 @@ def test_watches_ten_big_coins():
     assert len(pairs) == 10
     assert {"BTC/EUR", "ETH/EUR"} <= set(pairs)
     assert all(p.endswith("/EUR") for p in pairs)
+
+
+def test_stake_share_of_balance():
+    s = strategy(None)
+    s.wallets = type("W", (), {"get_total_stake_amount": lambda self: 60.0})()
+    now = datetime(2026, 1, 1, tzinfo=UTC)
+    assert s.custom_stake_amount("BTC/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "trend", "long") == 30.0
+    assert s.custom_stake_amount("SOL/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "crash", "long") == 15.0
+    # nie mehr als frei verfuegbar
+    assert s.custom_stake_amount("BTC/EUR", now, 1.0, 10.0, 5.0, 20.0, 1.0, "trend", "long") == 20.0
