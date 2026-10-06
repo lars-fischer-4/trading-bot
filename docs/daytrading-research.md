@@ -101,3 +101,23 @@ Idee: viele Coins laufend beobachten, nach einem Rückgang kaufen, bei +0.6 bis 
 Der Limit-Kauf trifft nur kurze Ausreisser nach unten, die sofort zurückkommen. Im Freqtrade-Backtest auf den 10 grössten Coins: +33 %, 422 Trades, 84 % Gewinner. Mit einem Stop von 10 bis 15 % halbiert sich der Gewinn ungefähr.
 
 Kombiniert mit ComboV1 (ComboV2: Limit-Käufe auf 6 Coins, 8 Positionen à 6 EUR) kam der Backtest auf +33 % statt +51 % für ComboV1 allein: Die kleineren Einsätze kosten bei Trend und Crash-Kauf mehr, als die Limit-Käufe bringen (+6 %). Der Bot bleibt deshalb bei ComboV1.
+
+## Nachtrag: Weitere Strategie-Typen (6. Oktober 2026)
+
+Ganzes Kapital investiert, 0.25 % Gebühr pro Kauf oder Verkauf, 20.01.2025 bis 05.10.2026 (`research/candidates.py`). Zum Vergleich: alle 10 Coins halten −52 %, BTC halten −22 %, ComboV1 +51 % bei 8 % grösstem Rückgang.
+
+| Ansatz | Quelle | bestes Ergebnis | grösster Rückgang |
+| --- | --- | --- | --- |
+| BTC nur 21 bis 23 Uhr UTC halten | [Quantpedia](https://quantpedia.com/are-there-seasonal-intraday-or-overnight-anomalies-in-bitcoin/) | −86 % | 87 % |
+| BTC nur am Wochenende halten | | −34 % | 39 % |
+| Zeitreihen-Momentum (EMA, volatilitätsnormiert), top 10 | [Studie 2025](https://www.zurnalai.vu.lt/BATP/article/view/44540) | +11 % | 31 % |
+| Zeitreihen-Momentum, nur BTC und ETH | | +41 % | 36 % |
+| Querschnitt-Momentum (die 2 bis 3 stärksten Coins der Woche) | | −55 bis −74 % | 75 bis 89 % |
+| dasselbe nur bei BTC über dem 50-Tage-Schnitt, top 20 | | +49 %, aber 2025 nur +11 % | 47 % |
+| Donchian-Ausbruch 20/55 Tage | | +8 % | 29 % |
+| Verlierer des Vortags kaufen | | −98 % | 99 % |
+| ETH/BTC-Verhältnis umschichten | | −51 % | 69 % |
+
+Keiner der Ansätze schlägt ComboV1, und alle schwanken deutlich stärker. Der Stunden-Effekt verschwindet nach Gebühren vollständig.
+
+Trendteil von ComboV1 mit längerer Historie (BTC und ETH, 4h-Kerzen seit März 2023, `research/trend_variants.py`): Der 50-Tage-Schnitt mit 2-%-Band ist in jedem Jahr unter den besten (2024 +52 %, 2025 +29 %, 2026 +28 %). Schnellere Schnitte oder EMA-Kreuzungen sind in mindestens einem Jahr deutlich schlechter. Die aktuelle Einstellung bleibt.
