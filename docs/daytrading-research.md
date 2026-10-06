@@ -87,3 +87,17 @@ ComboV1 mit den N umsatzstärksten EUR-Coins, max. 4 Positionen, 12.50 EUR pro T
 | 40 | 457 | −37 % | 55 % |
 
 Mit 10 Coins hält das Ergebnis in beiden Jahren (2025: +43 % statt +23 %, 2026: +19 % wie mit 4 Coins). Ab etwa 12 Coins kommen Meme-Coins dazu (MOODENG, WIF, PEPE), deren Einbrüche nicht abprallen. Der Bot nutzt deshalb die 10 grössten.
+
+## Nachtrag: +1 % mitnehmen auf 50 Coins (6. Oktober 2026)
+
+Idee: viele Coins laufend beobachten, nach einem Rückgang kaufen, bei +0.6 bis +2 % verkaufen. 50 umsatzstärkste EUR-Coins, 20.01.2025 bis 05.10.2026.
+
+| Variante | Varianten | Ergebnis |
+| --- | --- | --- |
+| Marktkauf nach Rückgang von 1 bis 5 %, Ziel 0.6 bis 1.5 % | 216 | alle im Minus |
+| Dasselbe „lernend“: nur Coins, bei denen die Regel in den letzten 14 bis 60 Tagen im Plus war | 48 | alle im Minus |
+| Limit-Kauf 3 % unter dem letzten Kurs, Ziel 0.6 bis 2 %, kein Stop, max. 1 Tag | 8 | im Plus in beiden Jahren |
+
+Der Limit-Kauf trifft nur kurze Ausreisser nach unten, die sofort zurückkommen. Im Freqtrade-Backtest auf den 10 grössten Coins: +33 %, 422 Trades, 84 % Gewinner. Mit einem Stop von 10 bis 15 % halbiert sich der Gewinn ungefähr.
+
+Kombiniert mit ComboV1 (ComboV2: Limit-Käufe auf 6 Coins, 8 Positionen à 6 EUR) kam der Backtest auf +33 % statt +51 % für ComboV1 allein: Die kleineren Einsätze kosten bei Trend und Crash-Kauf mehr, als die Limit-Käufe bringen (+6 %). Der Bot bleibt deshalb bei ComboV1.
