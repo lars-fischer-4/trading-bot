@@ -17,6 +17,30 @@ notify() {
     set -u
 }
 
+# Waechter: laeuft der Bot nicht oder ist er seit dem letzten Lauf abgestuerzt,
+# letzte Log-Zeilen per Telegram schicken und neu starten
+STATE=$(docker inspect -f '{{.State.Running}} {{.RestartCount}}' freqtrade 2>/dev/null || echo "missing 0")
+RUNNING=${STATE% *}
+RESTARTS=${STATE#* }
+LAST_RESTARTS=$(cat "$BOT_DIR/.restart_count" 2>/dev/null || echo "$RESTARTS")
+echo "$RESTARTS" > "$BOT_DIR/.restart_count"
+# Freqtrade schreibt jede Minute eine Heartbeat-Zeile; 10 Minuten ohne Log heisst: haengt
+SILENT=false
+LOGFILE="$BOT_DIR/user_data/logs/freqtrade.log"
+if [ "$RUNNING" = "true" ] && [ -f "$LOGFILE" ] && [ -z "$(find "$LOGFILE" -mmin -10)" ]; then
+    SILENT=true
+fi
+if [ "$RUNNING" != "true" ] || [ "$RESTARTS" -gt "$LAST_RESTARTS" ] || [ "$SILENT" = "true" ]; then
+    LOGS=$(docker logs --tail 15 freqtrade 2>&1 | grep -v -i "token\|secret\|key" | cut -c1-200 || true)
+    if [ "$SILENT" = "true" ]; then
+        docker compose restart > /dev/null 2>&1 || true
+    else
+        docker compose up -d --remove-orphans > /dev/null 2>&1 || true
+    fi
+    notify "Bot war gestoppt oder abgestuerzt, Neustart versucht. Letzte Log-Zeilen:
+$LOGS"
+fi
+
 git fetch -q origin main
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse origin/main)
