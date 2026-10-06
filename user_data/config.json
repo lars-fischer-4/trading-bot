@@ -49,8 +49,14 @@
         "pair_whitelist": [
             "BTC/EUR",
             "ETH/EUR",
+            "XRP/EUR",
             "SOL/EUR",
-            "XRP/EUR"
+            "ADA/EUR",
+            "SUI/EUR",
+            "DOGE/EUR",
+            "LINK/EUR",
+            "FET/EUR",
+            "TAO/EUR"
         ],
         "pair_blacklist": []
     },

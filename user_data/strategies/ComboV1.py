@@ -1,7 +1,8 @@
 """
 ComboV1: ein Bot fuer alles, was sich im Test gelohnt hat.
 
-Laeuft auf 5-Minuten-Kerzen und beobachtet BTC, ETH, SOL und XRP laufend.
+Laeuft auf 5-Minuten-Kerzen und beobachtet die 10 umsatzstaerksten Coins auf Bitvavo laufend
+(BTC, ETH, XRP, SOL, ADA, SUI, DOGE, LINK, FET, TAO; Liste in config.json).
 Zwei Arten von Trades (enter_tag):
 
   trend  Trendfolge wie TrendFollowV2, nur BTC und ETH: kaufen, wenn der 4-Stunden-Schlusskurs
@@ -11,7 +12,8 @@ Zwei Arten von Trades (enter_tag):
          Ziel +8 %, Stop -8 %, nach spaetestens 4 Stunden raus.
 
 Weggelassen, weil sie im Test nach Gebuehren verloren haben: kurze Ruecksetzer-Kaeufe,
-Ausbrueche, Scalping und kleinere Coins (siehe docs/daytrading-research.md).
+Ausbrueche, Scalping und kleinere Coins. Mit 20 Coins sank der Gewinn auf +6 %, mit 40 Coins
+lag er bei -37 % (siehe docs/daytrading-research.md).
 
 Risikoregeln, Notbremse, News, Tagesbericht und 30-Minuten-Status kommen von TrendFollowV1.
 """

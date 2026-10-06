@@ -2,7 +2,7 @@
 
 Krypto-Bot auf Basis von [Freqtrade](https://www.freqtrade.io), läuft in Docker auf dem Pi und meldet sich per Telegram.
 
-- **Strategie:** `ComboV1`, ein Bot für alles: Trendfolge auf BTC und ETH (Kauf über dem 50-Tage-Durchschnitt) und schnelle Abprall-Käufe nach Einbrüchen von mehr als 7 % in einer Stunde auf BTC, ETH, SOL und XRP. Beobachtet die Kurse alle paar Sekunden.
+- **Strategie:** `ComboV1`, ein Bot für alles: Trendfolge auf BTC und ETH (Kauf über dem 50-Tage-Durchschnitt) und schnelle Abprall-Käufe nach Einbrüchen von mehr als 7 % in einer Stunde auf den 10 umsatzstärksten Coins (BTC, ETH, XRP, SOL, ADA, SUI, DOGE, LINK, FET, TAO). Beobachtet die Kurse alle paar Sekunden.
 - **Börse:** Bitvavo (wechselbar in `user_data/config.json`)
 - **Modus:** Spielgeld (`"dry_run": true`) mit 50 EUR Startkapital
 
@@ -10,13 +10,15 @@ Krypto-Bot auf Basis von [Freqtrade](https://www.freqtrade.io), läuft in Docker
 
 Bitvavo-Kurse, 0.25 % Gebühr, 10 EUR pro Trade, Schutzregeln aktiv (Gewinn in % der 50 EUR):
 
-| Zeitraum | ComboV1 | Markt (BTC, ETH, SOL, XRP) |
-| --- | --- | --- |
-| 20.01.2025 bis 31.12.2025 | +18 % | −36 % |
-| 01.01.2026 bis 05.10.2026 | +16 % | −3 % |
-| gesamt | +35 %, grösster Rückgang 7 % | −38 % |
+| Zeitraum | ComboV1, 10 Coins | ComboV1, nur 4 Coins | Markt (10 Coins) |
+| --- | --- | --- | --- |
+| 20.01.2025 bis 31.12.2025 | +35 % | +18 % | −55 % |
+| 01.01.2026 bis 05.10.2026 | +16 % | +16 % | +5 % |
+| gesamt | +51 %, grösster Rückgang 8 % | +35 % | −54 % |
 
-51 Trades in 20 Monaten: 18 Trend-Trades (+6.8 % im Schnitt) und 33 Abprall-Käufe (+1.6 % im Schnitt). Im Ergebnis für 2026 stecken 16 % aus zwei Trend-Positionen, die am Ende des Tests noch offen waren. Kurze Rücksetzer-Käufe, Scalping und kleine Coins verlieren nach Gebühren und sind deshalb nicht drin ([docs/daytrading-research.md](docs/daytrading-research.md)).
+125 Trades in 20 Monaten (etwa 6 pro Monat): 18 Trend-Trades auf BTC und ETH und 107 Abprall-Käufe (+1.2 % im Schnitt). Im Ergebnis für 2026 stecken rund 16 Prozentpunkte aus zwei Trend-Positionen, die am Ende des Tests noch offen waren.
+
+Mehr Coins bringen nicht mehr Gewinn: Mit den 20 grössten Coins kam der Test auf +6 %, mit 40 Coins auf −37 %. Kleine Coins fallen nach einem Einbruch oft weiter. Die Coin-Liste ist nach dem heutigen Umsatz gewählt, das Ergebnis ist deshalb eher etwas zu gut. Kurze Rücksetzer-Käufe und Scalping verlieren nach Gebühren ([docs/daytrading-research.md](docs/daytrading-research.md)).
 
 ## Risikoregeln
 

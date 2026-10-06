@@ -111,3 +111,11 @@ def test_config_one_bot_dry_run():
     assert cfg["stake_amount"] * cfg["max_open_trades"] <= cfg["available_capital"]
     assert cfg["stake_amount"] <= 0.2 * cfg["available_capital"]
     assert "ComboV1" in (ROOT / "docker-compose.yml").read_text()
+
+
+def test_watches_ten_big_coins():
+    cfg = json.load(open(Path(__file__).parent.parent / "user_data" / "config.json"))
+    pairs = cfg["exchange"]["pair_whitelist"]
+    assert len(pairs) == 10
+    assert {"BTC/EUR", "ETH/EUR"} <= set(pairs)
+    assert all(p.endswith("/EUR") for p in pairs)
