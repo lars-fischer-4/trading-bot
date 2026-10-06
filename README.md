@@ -59,6 +59,18 @@ Automatisch:
 | `/stop` | Bot anhalten |
 | `/help` | alle Befehle |
 
+## Weboberfläche
+
+Im Heimnetz unter **http://tradingpi.local:8080** (FreqUI): Kontostand, offene und abgeschlossene Trades,
+Gewinn pro Tag, Kurscharts mit Kauf- und Verkaufspunkten, Start/Pause/Notbremse per Klick.
+
+- Benutzer und Passwort erzeugt der Pi beim ersten Update selbst und schickt sie einmal per Telegram.
+  Sie stehen nur in `~/trading-bot/.env` auf dem Pi (`UI_USER`, `UI_PASSWORD`), nie im Repo.
+- Neues Passwort: die `UI_`-Zeilen aus `.env` löschen, beim nächsten Update kommt ein neues.
+- Ausschalten: in `.env` `UI_ENABLED=false` setzen, dann `docker compose up -d`.
+- Von unterwegs ist die Oberfläche bewusst nicht erreichbar (kein Port im Router freigeben).
+  Wer sie unterwegs will, installiert am besten Tailscale auf Pi und Handy/Mac.
+
 ## Einrichtung auf dem Pi (einmalig)
 
 Voraussetzung: Docker ist installiert, und `~/trading-bot/.env` enthält `TELEGRAM_TOKEN` und `TELEGRAM_CHAT_ID`.
