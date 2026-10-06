@@ -197,3 +197,32 @@ meistens die Hälfte des Geldes ungenutzt herum.
 Übernommen: Ist nur einer der beiden Trend-Coins im Trend, bekommt er den ganzen freien Betrag;
 sind beide im Trend, je 50 %. Ob der zweite Anteil 50, 60 oder 70 % ist, spielt keine Rolle –
 der Fall tritt im Test nie ein. Dafür steigt der grösste Rückgang von 15 auf 18 %.
+
+### Nachprüfung der Stops und Gebühren (6. Oktober 2026, Abend)
+
+Mit dem neuen, grösseren Einsatz noch einmal geprüft (Start 50 → 168):
+
+| Änderung | Ende | grösster Rückgang |
+| --- | --- | --- |
+| Trend-Stop 15 % oder 20 % statt 12 % | 168 | 18 % |
+| Stop auf Einstand ab +20 %, auf +20 % ab +40 % | 168 | 18 % |
+| Trailing-Stop 25 % unter dem Hoch | 167 | 17 % |
+| Trend-Stop 10 % | 164 | 22 % |
+| Tagesverlust-Limit 4 % oder 5 % statt 3 % | 163 | 20 % |
+
+Der Trend-Stop greift praktisch nie (ausgestiegen wird über das Trendende), darum ändern 15 und 20 %
+nichts. Alles bleibt, wie es ist.
+
+Gebühren und Grenzen zur Einordnung:
+
+| Variante | Ende | 30 Tage Schnitt |
+| --- | --- | --- |
+| 0.15 % Gebühr (Maker, Limit-Order wartet im Buch) | 175 | +7.2 % |
+| 0.25 % Gebühr (heute, Taker) | 168 | +7.0 % |
+| 0.35 % Gebühr | 150 | +6.5 % |
+| nur 2 Positionen gleichzeitig | 158 | +6.7 % |
+
+Maker-Gebühren wären etwa 7 EUR auf 20 Monate wert. Dafür müssten die Kauf-Orders im Buch warten
+statt sofort auszuführen; wie oft sie dann gar nicht ausgeführt werden, lässt sich im Backtest nicht
+messen. Bei den Abprall-Käufen, die ein Zeitfenster von Minuten haben, wäre das riskant. Deshalb
+bleibt es bei sofortiger Ausführung.
