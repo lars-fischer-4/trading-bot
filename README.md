@@ -81,7 +81,7 @@ Voraussetzung: Docker ist installiert, und `~/trading-bot/.env` enthält `TELEGR
 3. Kursdaten laden und Backtest laufen lassen:
 
    ```bash
-   docker compose run --rm freqtrade download-data --config /freqtrade/user_data/config.json -t 5m 4h --timerange 20250101-
+   docker compose run --rm freqtrade download-data --config /freqtrade/user_data/config.json -t 5m 4h --timerange 20241101-
    docker compose run --rm freqtrade backtesting --config /freqtrade/user_data/config.json --strategy ComboV1 --timerange 20250120-
    ```
 
