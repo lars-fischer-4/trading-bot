@@ -46,7 +46,7 @@ class ComboV1(TrendFollowV1):
     trend_pairs = ("BTC/EUR", "ETH/EUR")
     trend_sma = 300  # 4h-Kerzen = 50 Tage
     trend_band = 0.02
-    trend_stop = 0.08
+    trend_stop = 0.12
 
     crash_drop = 0.07
     crash_target = 0.08
@@ -54,10 +54,10 @@ class ComboV1(TrendFollowV1):
     crash_max_hold = timedelta(hours=4)
 
     # Einsatz als Anteil am aktuellen Kontostand (waechst mit Gewinnen mit); None = stake_amount aus config
-    # Backtest 01.2025-10.2026: 50 % / 25 % brachte +154 % bei 17 % groesstem Rueckgang,
+    # Backtest 01.2025-10.2026: 50 % / 35 % brachte 50 -> 153 bei 15 % groesstem Rueckgang,
     # 10 EUR fest (vorher) +67 % bei 9 % (docs/daytrading-research.md)
     trend_stake: float | None = 0.50
-    crash_stake: float | None = 0.25
+    crash_stake: float | None = 0.35
 
     @property
     def protections(self):

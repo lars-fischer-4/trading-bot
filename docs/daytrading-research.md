@@ -140,3 +140,22 @@ Ziel von Lars: aus 50 in 30 Tagen mindestens 55, etwas mehr Risiko ist in Ordnun
 | **50 % / 25 %** | **127** | **+80 %** | **+41 %** | **+5.0 %** | **24 %** | **17 %** |
 
 Gewählt: 50 % / 25 %. Monate reichen von −8 % bis +25 %; etwa jeder dritte 30-Tage-Zeitraum endet im Minus. +10 % in jedem Monat schafft keine Variante.
+
+### Zweite Runde (6. Oktober 2026, Nachmittag)
+
+Ausgehend von 50 % / 25 % (50 → 127), je eine Änderung:
+
+| Änderung | Ende | 2025 | 2026 | grösster Rückgang |
+| --- | --- | --- | --- | --- |
+| Crash-Käufe 35 % statt 25 % | 143 | +98 % | +44 % | 17 % |
+| Trend-Stop 15 % statt 8 % | 135 | +80 % | +49 % | 15 % |
+| 250er statt 300er Schnitt | 134 | +73 % | +55 % | 17 % |
+| Band 1 % / 3 % | 128 / 122 | | | 18 / 19 % |
+| Nachkauf nach Stop im selben Trend | 127 | | | 20 % |
+| Trailing-Stop 15 / 20 % unter Hoch | 124 / 122 | | | 18 % |
+| 360er Schnitt | 118 | | | 21 % |
+| Tagesverlust-Limit 5 % statt 3 % | 126 | | | 19 % |
+| ohne Schutzregeln | 101 | | | 28 % |
+| **Crash 35 % und Trend-Stop 12 bis 15 %** | **153** | **+98 %** | **+54 %** | **15 %** |
+
+Übernommen: Crash-Käufe 35 %, Trend-Stop 12 % (12 und 15 % ergaben dasselbe). Der 250er Schnitt war nur 2026 besser und bleibt deshalb bei 300.

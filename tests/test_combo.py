@@ -138,7 +138,7 @@ def test_fixed_stops():
     t = FakeTrade("crash", 5)
     assert abs(s.custom_stoploss("X", t, t.now, 1.0, 0.0, False) - 0.08) < 1e-6
     t = FakeTrade("trend", 5)
-    assert abs(s.custom_stoploss("X", t, t.now, 1.0, 0.0, False) - 0.08) < 1e-6
+    assert abs(s.custom_stoploss("X", t, t.now, 1.0, 0.0, False) - 0.12) < 1e-6
 
 
 def test_config_one_bot_dry_run():
@@ -163,6 +163,6 @@ def test_stake_share_of_balance():
     s.wallets = type("W", (), {"get_total_stake_amount": lambda self: 60.0})()
     now = datetime(2026, 1, 1, tzinfo=UTC)
     assert s.custom_stake_amount("BTC/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "trend", "long") == 30.0
-    assert s.custom_stake_amount("SOL/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "crash", "long") == 15.0
+    assert s.custom_stake_amount("SOL/EUR", now, 1.0, 10.0, 5.0, 100.0, 1.0, "crash", "long") == 21.0
     # nie mehr als frei verfuegbar
     assert s.custom_stake_amount("BTC/EUR", now, 1.0, 10.0, 5.0, 20.0, 1.0, "trend", "long") == 20.0
