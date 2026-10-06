@@ -15,7 +15,7 @@ Weggelassen, weil sie im Test nach Gebuehren verloren haben: kurze Ruecksetzer-K
 Ausbrueche, Scalping und kleinere Coins. Mit 20 Coins sank der Gewinn auf +6 %, mit 40 Coins
 lag er bei -37 % (siehe docs/daytrading-research.md).
 
-Risikoregeln, Notbremse, News, Tagesbericht und 15-Minuten-Status kommen von TrendFollowV1.
+Risikoregeln, Notbremse, News, Tagesbericht und 10-Minuten-Status kommen von TrendFollowV1.
 """
 
 from datetime import datetime, timedelta
