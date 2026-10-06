@@ -17,6 +17,29 @@ notify() {
     set -u
 }
 
+# Weboberflaeche: Zugangsdaten einmalig zufaellig erzeugen (nur in .env auf dem Pi), Bot damit neu
+# starten und Adresse + Login privat per Telegram schicken
+if [ -f "$BOT_DIR/.env" ] && ! grep -q '^UI_ENABLED=' "$BOT_DIR/.env"; then
+    rnd() { python3 -c 'import secrets,string; a=string.ascii_letters+string.digits; print("p"+"".join(secrets.choice(a) for _ in range(int("'"$1"'"))))'; }
+    UI_PW=$(rnd 15)
+    {
+        echo ""
+        echo "# Weboberflaeche (automatisch erzeugt)"
+        echo "UI_USER=lars"
+        echo "UI_PASSWORD=$UI_PW"
+        echo "UI_JWT_SECRET=$(rnd 48)"
+        echo "UI_WS_TOKEN=$(rnd 30)"
+        echo "UI_ENABLED=true"
+    } >> "$BOT_DIR/.env"
+    if docker compose up -d --remove-orphans > /dev/null 2>&1; then
+        notify "Weboberflaeche ist bereit (nur im Heimnetz):
+http://tradingpi.local:8080
+Benutzer: lars
+Passwort: $UI_PW
+(steht auch in ~/trading-bot/.env auf dem Pi)"
+    fi
+fi
+
 # Waechter: laeuft der Bot nicht oder ist er seit dem letzten Lauf abgestuerzt,
 # letzte Log-Zeilen per Telegram schicken und neu starten
 STATE=$(docker inspect -f '{{.State.Running}} {{.RestartCount}}' freqtrade 2>/dev/null || echo "missing 0")

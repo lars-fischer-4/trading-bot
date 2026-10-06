@@ -101,5 +101,16 @@
     "force_entry_enable": true,
     "internals": {
         "process_throttle_secs": 5
+    },
+    "api_server": {
+        "enabled": false,
+        "listen_ip_address": "0.0.0.0",
+        "listen_port": 8080,
+        "verbosity": "error",
+        "enable_openapi": false,
+        "ws_token": "",
+        "CORS_origins": [],
+        "username": "",
+        "password": ""
     }
 }

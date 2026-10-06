@@ -7,7 +7,7 @@ Zwei Arten von Trades (enter_tag):
 
   trend  Trendfolge wie TrendFollowV2, nur BTC und ETH: im Trend sein, solange der 4-Stunden-
          Schlusskurs mehr als 2 % ueber den 50-Tage-Durchschnitt gestiegen und seither nicht mehr
-         als 2 % darunter gefallen ist. Verkaufen, wenn er mehr als 2 % darunter faellt. Stop 8 %;
+         als 2 % darunter gefallen ist. Verkaufen, wenn er mehr als 2 % darunter faellt. Stop 12 %;
          nach einem Stop erst beim naechsten Trend wieder kaufen.
   crash  Schneller Abprall-Kauf: Der Kurs liegt mehr als 7 % unter dem Hoch der letzten Stunde.
          Ziel +8 %, Stop -8 %, nach spaetestens 4 Stunden raus.

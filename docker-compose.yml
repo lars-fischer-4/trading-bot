@@ -3,6 +3,9 @@ services:
     image: freqtradeorg/freqtrade:stable
     container_name: freqtrade
     restart: unless-stopped
+    # Weboberflaeche im Heimnetz: http://tradingpi.local:8080 (Router leitet den Port nicht weiter)
+    ports:
+      - "8080:8080"
     volumes:
       - ./user_data:/freqtrade/user_data
     environment:
@@ -11,6 +14,12 @@ services:
       FREQTRADE__TELEGRAM__CHAT_ID: ${TELEGRAM_CHAT_ID}
       FREQTRADE__EXCHANGE__KEY: ${EXCHANGE_KEY:-}
       FREQTRADE__EXCHANGE__SECRET: ${EXCHANGE_SECRET:-}
+      # Weboberflaeche (FreqUI): Zugangsdaten erzeugt deploy/auto-update.sh einmalig in .env
+      FREQTRADE__API_SERVER__ENABLED: ${UI_ENABLED:-false}
+      FREQTRADE__API_SERVER__USERNAME: ${UI_USER:-}
+      FREQTRADE__API_SERVER__PASSWORD: ${UI_PASSWORD:-}
+      FREQTRADE__API_SERVER__JWT_SECRET_KEY: ${UI_JWT_SECRET:-nur-platzhalter-solange-die-oberflaeche-aus-ist}
+      FREQTRADE__API_SERVER__WS_TOKEN: ${UI_WS_TOKEN:-}
       TZ: Europe/Zurich
     logging:
       driver: json-file

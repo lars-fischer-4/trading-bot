@@ -154,3 +154,23 @@ def test_live_files_never_switch_repo_to_real_money():
     assert "user_data/config.live.json" in (root / ".gitignore").read_text()
     assert not (root / "user_data/config.live.json").exists()
     assert "config.live.json" in (root / "docker-compose.live.yml").read_text()
+
+
+def test_web_ui_config_valid_and_secret_free():
+    import json
+    import re
+
+    from freqtrade.configuration.config_validation import validate_config_schema
+
+    root = Path(__file__).resolve().parent.parent
+    cfg = json.loads((root / "user_data/config.json").read_text())
+    api = cfg["api_server"]
+    # Zugangsdaten nie im Repo; eingeschaltet wird nur ueber .env auf dem Pi
+    assert api["enabled"] is False and api["password"] == "" and "jwt_secret_key" not in api
+    compose = (root / "docker-compose.yml").read_text()
+    assert "FREQTRADE__API_SERVER__ENABLED: ${UI_ENABLED:-false}" in compose
+    # Freqtrade verlangt mind. 32 Zeichen, auch wenn die Oberflaeche aus ist
+    placeholder = re.search(r"UI_JWT_SECRET:-([^}]*)\}", compose).group(1)
+    api["jwt_secret_key"] = placeholder
+    assert len(placeholder) >= 32
+    validate_config_schema(cfg)
