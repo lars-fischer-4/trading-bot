@@ -1,0 +1,205 @@
+2026-10-12 15:08:58,369 - freqtrade - INFO - freqtrade 2026.9
+2026-10-12 15:08:58,578 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2026-10-12 15:09:00,230 - freqtrade.configuration.load_config - INFO - Using config: user_data/config.json ...
+2026-10-12 15:09:00,231 - freqtrade.configuration.load_config - INFO - Using config: /tmp/o.json ...
+2026-10-12 15:09:00,234 - freqtrade.loggers - INFO - Enabling colorized output.
+2026-10-12 15:09:00,234 - freqtrade.loggers - INFO - Logfile configured
+2026-10-12 15:09:00,234 - freqtrade.loggers - INFO - Verbosity set to 0
+2026-10-12 15:09:00,235 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2026-10-12 15:09:00,235 - freqtrade.configuration.configuration - INFO - Parameter --enable-protections detected, enabling Protections ...
+2026-10-12 15:09:00,236 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 4 ...
+2026-10-12 15:09:00,236 - freqtrade.configuration.configuration - INFO - Parameter --fee detected, setting fee to: 0.0025 ...
+2026-10-12 15:09:00,236 - freqtrade.configuration.configuration - INFO - Parameter --timerange detected: 20261006- ...
+2026-10-12 15:09:00,237 - freqtrade.configuration.configuration - INFO - Using user-data directory: user_data ...
+2026-10-12 15:09:00,237 - freqtrade.configuration.configuration - INFO - Using data directory: user_data/data/bitvavo ...
+2026-10-12 15:09:00,237 - freqtrade.configuration.configuration - INFO - Parameter --export detected: trades ...
+2026-10-12 15:09:00,238 - freqtrade.configuration.configuration - INFO - Parameter --cache=none detected ...
+2026-10-12 15:09:00,238 - freqtrade.configuration.configuration - INFO - Filter trades by timerange: 20261006-
+2026-10-12 15:09:00,239 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2026-10-12 15:09:00,243 - freqtrade.exchange.check_exchange - WARNING - Exchange "bitvavo" is known to the ccxt library, available for the bot, but not officially supported by the Freqtrade 
+development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2026-10-12 15:09:00,244 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2026-10-12 15:09:00,244 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2026-10-12 15:09:00,247 - freqtrade.commands.optimize_commands - INFO - Starting freqtrade in Backtesting mode
+2026-10-12 15:09:00,247 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2026-10-12 15:09:00,248 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.85
+2026-10-12 15:09:00,251 - freqtrade.exchange.exchange - INFO - Using Exchange "Bitvavo"
+2026-10-12 15:09:01,213 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange class 'Bitvavo' ...
+2026-10-12 15:09:01,267 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy ComboV1 from '/home/runner/work/trading-bot/trading-bot/user_data/strategies/ComboV1.py'...
+2026-10-12 15:09:01,267 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2026-10-12 15:09:01,268 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'order_types' with value from the configuration: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 
+'market', 'force_entry': 'market', 'force_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': False}.
+2026-10-12 15:09:01,268 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value from the configuration: EUR.
+2026-10-12 15:09:01,269 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value from the configuration: 10.
+2026-10-12 15:09:01,269 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value from the configuration: {'entry': 2, 'exit': 2, 'exit_timeout_count': 0, 'unit':
+'minutes'}.
+2026-10-12 15:09:01,270 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value from the configuration: 4.
+2026-10-12 15:09:01,270 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2026-10-12 15:09:01,270 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 5m
+2026-10-12 15:09:01,271 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.1
+2026-10-12 15:09:01,271 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2026-10-12 15:09:01,271 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive: 0.04
+2026-10-12 15:09:01,271 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.08
+2026-10-12 15:09:01,272 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: True
+2026-10-12 15:09:01,272 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2026-10-12 15:09:01,272 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2026-10-12 15:09:01,273 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'force_entry': 'market', 
+'force_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': False}
+2026-10-12 15:09:01,273 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2026-10-12 15:09:01,273 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: EUR
+2026-10-12 15:09:01,274 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 10
+2026-10-12 15:09:01,274 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 320
+2026-10-12 15:09:01,274 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 2, 'exit': 2, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2026-10-12 15:09:01,275 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2026-10-12 15:09:01,275 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2026-10-12 15:09:01,275 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2026-10-12 15:09:01,275 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2026-10-12 15:09:01,276 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2026-10-12 15:09:01,276 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2026-10-12 15:09:01,276 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2026-10-12 15:09:01,277 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2026-10-12 15:09:01,277 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 4
+2026-10-12 15:09:01,277 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2026-10-12 15:09:01,283 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from 
+'/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/freqtrade/plugins/pairlist/StaticPairList.py'...
+2026-10-12 15:09:01,285 - freqtrade.optimize.backtesting - INFO - Using fee 0.2500% from config.
+2026-10-12 15:09:01,446 - freqtrade.data.converter.converter - INFO - Missing data fillup for DOGE/EUR, 5m: before: 2045 - after: 2229 - 9.00%
+2026-10-12 15:09:01,463 - freqtrade.data.converter.converter - INFO - Missing data fillup for LINK/EUR, 5m: before: 2194 - after: 2229 - 1.60%
+2026-10-12 15:09:01,480 - freqtrade.data.converter.converter - INFO - Missing data fillup for FET/EUR, 5m: before: 2166 - after: 2229 - 2.91%
+2026-10-12 15:09:01,499 - freqtrade.data.converter.converter - INFO - Missing data fillup for TAO/EUR, 5m: before: 2177 - after: 2229 - 2.39%
+2026-10-12 15:09:01,503 - freqtrade.optimize.backtesting - INFO - Loading data from 2026-10-04 21:20:00 up to 2026-10-12 15:00:00 (7 days).
+2026-10-12 15:09:01,752 - freqtrade.optimize.backtesting - INFO - Dataload complete. Calculating indicators
+2026-10-12 15:09:01,753 - freqtrade.optimize.backtesting - WARNING - Backtest result caching disabled due to use of open-ended timerange.
+2026-10-12 15:09:01,754 - freqtrade.optimize.backtesting - INFO - Running backtesting for Strategy ComboV1
+2026-10-12 15:09:01,755 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2026-10-12 15:09:01,755 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): adx_min = 20
+2026-10-12 15:09:01,756 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): ema_fast = 21
+2026-10-12 15:09:01,756 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): ema_slow = 55
+2026-10-12 15:09:01,760 - freqtrade.data.dataprovider - INFO - Loading data for BTC/EUR 4h from 2026-08-13 16:00:00 to unbounded
+2026-10-12 15:09:01,796 - freqtrade.data.dataprovider - INFO - Loading data for ETH/EUR 4h from 2026-08-13 16:00:00 to unbounded
+2026-10-12 15:09:01,856 - freqtrade.optimize.backtesting - INFO - Backtesting with data from 2026-10-06 00:00:00 up to 2026-10-12 15:00:00 (6 days).
+2026-10-12 15:09:01,858 - freqtrade.resolvers.iresolver - INFO - Using resolved protection CooldownPeriod from 
+'/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/freqtrade/plugins/protections/cooldown_period.py'...
+2026-10-12 15:09:01,859 - freqtrade.resolvers.iresolver - INFO - Using resolved protection MaxDrawdown from 
+'/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/freqtrade/plugins/protections/max_drawdown_protection.py'...
+2026-10-12 15:09:01,861 - freqtrade.resolvers.iresolver - INFO - Using resolved protection StoplossGuard from 
+'/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/freqtrade/plugins/protections/stoploss_guard.py'...
+backtest ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4/4       100% • 0:00:00 • 0:00:00
+backtest ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1908/1908 100% • 0:00:02 • 0:00:00
+2026-10-12 15:09:03,649 - freqtrade.misc - INFO - dumping json to "user_data/backtest_results/backtest-result-2026-10-12_15-09-03.meta.json"
+Result for strategy ComboV1
+                                               BACKTESTING REPORT                                               
+┏━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃     Pair ┃ Trades ┃ Avg Profit % ┃ Tot Profit EUR ┃ Tot Profit % ┃     Avg Duration ┃  Win  Draw  Loss  Win% ┃
+┡━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━┩
+│  ETH/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│  XRP/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│  SOL/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│  ADA/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│  SUI/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│ DOGE/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│ LINK/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│  FET/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│  TAO/EUR │      0 │          0.0 │          0.000 │          0.0 │             0:00 │    0     0     0     0 │
+│  BTC/EUR │      1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+│    TOTAL │      1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+└──────────┴────────┴──────────────┴────────────────┴──────────────┴──────────────────┴────────────────────────┘
+                                            LEFT OPEN TRADES REPORT                                            
+┏━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃    Pair ┃ Trades ┃ Avg Profit % ┃ Tot Profit EUR ┃ Tot Profit % ┃     Avg Duration ┃  Win  Draw  Loss  Win% ┃
+┡━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ BTC/EUR │      1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+│   TOTAL │      1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+└─────────┴────────┴──────────────┴────────────────┴──────────────┴──────────────────┴────────────────────────┘
+                                                 ENTER TAG STATS                                                  
+┏━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Enter Tag ┃ Entries ┃ Avg Profit % ┃ Tot Profit EUR ┃ Tot Profit % ┃     Avg Duration ┃  Win  Draw  Loss  Win% ┃
+┡━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━┩
+│     trend │       1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+│     TOTAL │       1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+└───────────┴─────────┴──────────────┴────────────────┴──────────────┴──────────────────┴────────────────────────┘
+                                                EXIT REASON STATS                                                 
+┏━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Exit Reason ┃ Exits ┃ Avg Profit % ┃ Tot Profit EUR ┃ Tot Profit % ┃     Avg Duration ┃  Win  Draw  Loss  Win% ┃
+┡━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━┩
+│  force_exit │     1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+│       TOTAL │     1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+└─────────────┴───────┴──────────────┴────────────────┴──────────────┴──────────────────┴────────────────────────┘
+                                                        MIXED TAG STATS                                                        
+┏━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Enter Tag ┃ Exit Reason ┃ Trades ┃ Avg Profit % ┃ Tot Profit EUR ┃ Tot Profit % ┃     Avg Duration ┃  Win  Draw  Loss  Win% ┃
+┡━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━┩
+│     trend │  force_exit │      1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+│     TOTAL │             │      1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │
+└───────────┴─────────────┴────────┴──────────────┴────────────────┴──────────────┴──────────────────┴────────────────────────┘
+                                   SUMMARY METRICS                                    
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Metric                                 ┃ Value                                     ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Backtesting from                       │ 2026-10-06 00:00:00                       │
+│ Backtesting to                         │ 2026-10-12 15:00:00                       │
+│ Trading Mode                           │ Spot                                      │
+│ Max open trades                        │ 4                                         │
+│                                        │                                           │
+│ Total/Daily Avg Trades                 │ 1 / 0.17                                  │
+│ Starting balance                       │ 50 EUR                                    │
+│ Final balance                          │ 48.022 EUR                                │
+│ Absolute profit                        │ -1.978 EUR                                │
+│ Total profit %                         │ -3.96%                                    │
+│ CAGR %                                 │ -91.42%                                   │
+│ Sharpe (closed trades)                 │ -100.00                                   │
+│ Sortino (closed trades)                │ -100.00                                   │
+│ Calmar (closed trades)                 │ -318.42                                   │
+│ SQN                                    │ -100.00                                   │
+│ Mean profit p-value                    │ 1                                         │
+│ Profit factor                          │ 0.00                                      │
+│ Expectancy (Ratio)                     │ -1.98 (-1.00)                             │
+│ Avg. daily profit                      │ -0.33 EUR                                 │
+│ Avg. stake amount                      │ 50 EUR                                    │
+│ Market change                          │ -8.33%                                    │
+│ Total trade volume                     │ 98.512 EUR                                │
+│                                        │                                           │
+│ Best Pair                              │ ETH/EUR 0.00%                             │
+│ Worst Pair                             │ BTC/EUR -3.96%                            │
+│ Best trade                             │ BTC/EUR -3.95%                            │
+│ Worst trade                            │ BTC/EUR -3.95%                            │
+│ Best day                               │ -1.978 EUR                                │
+│ Worst day                              │ -1.978 EUR                                │
+│ Days win/draw/lose                     │ 0 / 0 / 1                                 │
+│ Min/Max/Avg. Duration Winners          │ 0d 00:00 / 0d 00:00 / 0d 00:00            │
+│ Min/Max/Avg. Duration Losers           │ 6d 14:55 / 6d 14:55 / 6d 14:55            │
+│ Max Consecutive Wins / Loss            │ 0 / 1                                     │
+│ Rejected Entry signals                 │ 0                                         │
+│ Entry/Exit Timeouts                    │ 0 / 0                                     │
+│                                        │                                           │
+│ Min/Max balance (closed trades)        │ 48.022 EUR / 48.022 EUR                   │
+│ Max % of account underwater            │ 3.96%                                     │
+│ Absolute drawdown                      │ 1.978 EUR (3.96%)                         │
+│ Drawdown duration                      │ 0 days 00:00:00                           │
+│ Profit at drawdown start               │ 0 EUR                                     │
+│ Profit at drawdown end                 │ -1.978 EUR                                │
+│ Drawdown start                         │ 2026-10-12 15:00:00                       │
+│ Drawdown end                           │ 2026-10-12 15:00:00                       │
+│                                        │                                           │
+│ Wallet based Metrics                   │                                           │
+│ Min/Max balance (wallet balance)       │ 46.92 EUR / 50.292 EUR                    │
+│ Min/Max balance dates (wallet balance) │ 2026-10-08 17:25:00 / 2026-10-06 15:05:00 │
+│ Max % of account underwater (balance)  │ 6.70%                                     │
+│ Absolute drawdown (wallet balance)     │ 3.372 EUR (6.70%)                         │
+│ Drawdown duration                      │ 2 days 02:20:00                           │
+│ Profit at drawdown start               │ 0.292 EUR                                 │
+│ Profit at drawdown end                 │ -3.08 EUR                                 │
+│ Drawdown start                         │ 2026-10-06 15:05:00                       │
+│ Drawdown end                           │ 2026-10-08 17:25:00                       │
+│ Sharpe (daily wallet balance)          │ -6.57                                     │
+│ Sortino (daily wallet balance)         │ -19.67                                    │
+│ Calmar (daily wallet balance)          │ -164.55                                   │
+└────────────────────────────────────────┴───────────────────────────────────────────┘
+
+Backtested 2026-10-06 00:00:00 -> 2026-10-12 15:00:00 | Max open trades : 4
+                                                         STRATEGY SUMMARY                                                          
+┏━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃ Strategy ┃ Trades ┃ Avg Profit % ┃ Tot Profit EUR ┃ Tot Profit % ┃     Avg Duration ┃  Win  Draw  Loss  Win% ┃         Drawdown ┃
+┡━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│  ComboV1 │      1 │        -3.95 │         -1.978 │        -3.96 │ 6 days, 14:55:00 │    0     0     1     0 │ 1.978 EUR  3.96% │
+└──────────┴────────┴──────────────┴────────────────┴──────────────┴──────────────────┴────────────────────────┴──────────────────┘
