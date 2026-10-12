@@ -5,6 +5,8 @@ on:
 jobs:
   replay:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
@@ -18,10 +20,10 @@ jobs:
       - name: Backtest since 2026-09-20
         run: |
           echo '{"telegram":{"enabled":false},"api_server":{"jwt_secret_key":"replay-placeholder-0000000000000000000"}}' > /tmp/o.json
-          freqtrade backtesting --config user_data/config.json --config /tmp/o.json --userdir user_data --strategy ComboV1 --timerange 20260920- --enable-protections --fee 0.0025 --export trades --cache none | tail -60
+          freqtrade backtesting --config user_data/config.json --config /tmp/o.json --userdir user_data --strategy ComboV1 --timerange 20260920- --enable-protections --fee 0.0025 --export trades --cache none > /tmp/bt.txt 2>&1; tail -80 /tmp/bt.txt
       - name: Trades and prices
         run: |
-          python - <<'PY'
+          python - > /tmp/trades.txt <<'PY'
           import glob, json, zipfile
           import pandas as pd
           z = sorted(glob.glob('user_data/backtest_results/*.zip'))[-1]
@@ -40,3 +42,10 @@ jobs:
               print(df[['date', 'close', 'sma', 'rel']].iloc[::6].tail(25).to_string(index=False))
               print(df[['date', 'close', 'sma', 'rel']].tail(6).to_string(index=False))
           PY
+      - name: Publish output to branch replay-out
+        run: |
+          mkdir /tmp/pub && cp /tmp/bt.txt /tmp/trades.txt /tmp/pub/ && cd /tmp/pub
+          git init -q -b replay-out
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add -A && git commit -q -m "replay output $(date -u +%F)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" replay-out
