@@ -17,10 +17,10 @@ jobs:
       - name: Download candles
         run: |
           freqtrade download-data --config user_data/config.json --userdir user_data --exchange bitvavo -t 5m 4h --timerange 20250601- --data-format-ohlcv feather
-      - name: Backtest since 2026-09-20
+      - name: Backtest since 2026-10-06
         run: |
           echo '{"telegram":{"enabled":false},"api_server":{"jwt_secret_key":"replay-placeholder-0000000000000000000"}}' > /tmp/o.json
-          freqtrade backtesting --config user_data/config.json --config /tmp/o.json --userdir user_data --strategy ComboV1 --timerange 20260920- --enable-protections --fee 0.0025 --export trades --cache none > /tmp/bt.txt 2>&1; tail -80 /tmp/bt.txt
+          freqtrade backtesting --config user_data/config.json --config /tmp/o.json --userdir user_data --strategy ComboV1 --timerange 20261006- --enable-protections --fee 0.0025 --export trades --cache none > /tmp/bt.txt 2>&1; tail -80 /tmp/bt.txt
       - name: Trades and prices
         run: |
           python - > /tmp/trades.txt <<'PY'
@@ -34,13 +34,18 @@ jobs:
               for t in st['trades']:
                   print(t['pair'], t['enter_tag'], t['open_date'], round(t['open_rate'], 4), t['close_date'], round(t['close_rate'], 4),
                         t['exit_reason'], round(t['stake_amount'], 2), round(t['profit_abs'], 2), f"{100*t['profit_ratio']:.1f}%")
+          for p in ['BTC_EUR','ETH_EUR','XRP_EUR','SOL_EUR','ADA_EUR','SUI_EUR','DOGE_EUR','LINK_EUR','FET_EUR','TAO_EUR']:
+              df = pd.read_feather(f'user_data/data/bitvavo/{p}-5m.feather')
+              df = df[df.date >= '2026-10-06']
+              dd = df.close / df.high.rolling(12).max().shift(1) - 1
+              print(p, 'close 06.10. 08:00', df[df.date >= '2026-10-06 08:00'].close.iloc[0], 'now', df.close.iloc[-1], 'max 1h drop', round(dd.min(), 3), dd.idxmin() and df.loc[dd.idxmin(), 'date'])
           for p in ['BTC_EUR', 'ETH_EUR']:
               df = pd.read_feather(f'user_data/data/bitvavo/{p}-4h.feather')
               df['sma'] = df['close'].rolling(300).mean()
               df['rel'] = df['close'] / df['sma'] - 1
               print(p)
               print(df[['date', 'close', 'sma', 'rel']].iloc[::6].tail(25).to_string(index=False))
-              print(df[['date', 'close', 'sma', 'rel']].tail(6).to_string(index=False))
+              print(df[df.date >= '2026-10-05'][['date', 'close', 'sma', 'rel']].to_string(index=False))
           PY
       - name: Publish output to branch replay-out
         run: |
