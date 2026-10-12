@@ -1,0 +1,42 @@
+name: Replay recent trades
+on:
+  push:
+    branches: [replay]
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install freqtrade
+      - name: Download candles
+        run: |
+          freqtrade download-data --config user_data/config.json --userdir user_data --exchange bitvavo -t 5m 4h --timerange 20250601- --data-format-ohlcv feather
+      - name: Backtest since 2026-09-20
+        run: |
+          echo '{"telegram":{"enabled":false},"api_server":{"jwt_secret_key":"replay-placeholder-0000000000000000000"}}' > /tmp/o.json
+          freqtrade backtesting --config user_data/config.json --config /tmp/o.json --userdir user_data --strategy ComboV1 --timerange 20260920- --enable-protections --fee 0.0025 --export trades --cache none | tail -60
+      - name: Trades and prices
+        run: |
+          python - <<'PY'
+          import glob, json, zipfile
+          import pandas as pd
+          z = sorted(glob.glob('user_data/backtest_results/*.zip'))[-1]
+          zz = zipfile.ZipFile(z)
+          n = [x for x in zz.namelist() if x.endswith('.json') and '_config' not in x and 'meta' not in x and 'market_change' not in x][0]
+          d = json.loads(zz.read(n))
+          for name, st in d['strategy'].items():
+              for t in st['trades']:
+                  print(t['pair'], t['enter_tag'], t['open_date'], round(t['open_rate'], 4), t['close_date'], round(t['close_rate'], 4),
+                        t['exit_reason'], round(t['stake_amount'], 2), round(t['profit_abs'], 2), f"{100*t['profit_ratio']:.1f}%")
+          for p in ['BTC_EUR', 'ETH_EUR']:
+              df = pd.read_feather(f'user_data/data/bitvavo/{p}-4h.feather')
+              df['sma'] = df['close'].rolling(300).mean()
+              df['rel'] = df['close'] / df['sma'] - 1
+              print(p)
+              print(df[['date', 'close', 'sma', 'rel']].iloc[::6].tail(25).to_string(index=False))
+              print(df[['date', 'close', 'sma', 'rel']].tail(6).to_string(index=False))
+          PY
