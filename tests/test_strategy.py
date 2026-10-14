@@ -174,3 +174,14 @@ def test_web_ui_config_valid_and_secret_free():
     api["jwt_secret_key"] = placeholder
     assert len(placeholder) >= 32
     validate_config_schema(cfg)
+
+
+def test_pi_self_heal_script():
+    import os
+
+    root = Path(__file__).resolve().parent.parent
+    script = root / "deploy/pi-selbstheilung.sh"
+    assert os.access(script, os.X_OK)
+    text = script.read_text()
+    assert "RuntimeWatchdogSec" in text and "systemctl enable docker" in text
+    assert ".last_boot" in (root / ".gitignore").read_text()

@@ -118,6 +118,12 @@ Voraussetzung: Docker ist installiert, und `~/trading-bot/.env` enthält `TELEGR
 
    Sicherung: Eine Version, die auf Echtgeld umschaltet (`"dry_run": false`), wird nur eingespielt, wenn auf dem Pi die Datei `~/trading-bot/LIVE_OK` existiert. Sonst kommt nur eine Warnung per Telegram.
 
+6. Selbstheilung einschalten (einmalig): Hängt der Pi, startet er nach 15 Sekunden selbst neu. Nach jedem Neustart kommt eine Telegram-Meldung, mit einer Warnung, falls das Netzteil zu schwach war.
+
+   ```bash
+   sudo ~/trading-bot/deploy/pi-selbstheilung.sh
+   ```
+
 ## Alltag
 
 

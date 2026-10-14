@@ -14,3 +14,4 @@ LIVE_OK
 .blocked_rev
 .restart_count
 user_data/config.live.json
+.last_boot
