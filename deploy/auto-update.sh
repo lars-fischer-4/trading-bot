@@ -5,6 +5,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 BOT_DIR=$(pwd)
+BOOT_ID_FILE="$BOT_DIR/.last_boot"
 
 notify() {
     # Telegram-Nachricht, Fehler beim Senden sind egal
@@ -38,6 +39,23 @@ Benutzer: lars
 Passwort: $UI_PW
 (steht auch in ~/trading-bot/.env auf dem Pi)"
     fi
+fi
+
+# Nach einem Neustart des Pi einmal melden, mit Stromversorgung und letzten Zeilen vor dem Neustart
+BOOT_ID=$(cat /proc/sys/kernel/random/boot_id 2>/dev/null || echo unknown)
+if [ "$(cat "$BOOT_ID_FILE" 2>/dev/null)" != "$BOOT_ID" ]; then
+    echo "$BOOT_ID" > "$BOOT_ID_FILE"
+    THROTTLED=$(vcgencmd get_throttled 2>/dev/null | cut -d= -f2 || true)
+    MSG="Pi laeuft wieder, gestartet am $(uptime -s 2>/dev/null)."
+    if [ -n "$THROTTLED" ] && [ "$THROTTLED" != "0x0" ]; then
+        MSG="$MSG
+Achtung: Die Stromversorgung war zu schwach (Code $THROTTLED). Das ist beim Pi 5 die haeufigste Ursache fuer Haenger. Am besten das offizielle 27-W-Netzteil verwenden."
+    fi
+    PREV=$(journalctl -b -1 -n 8 --no-pager -o short 2>/dev/null | grep -v -i "token\|secret\|key" | cut -c1-160 || true)
+    [ -n "$PREV" ] && MSG="$MSG
+Letzte Zeilen vor dem Neustart:
+$PREV"
+    notify "$MSG"
 fi
 
 # Waechter: laeuft der Bot nicht oder ist er seit dem letzten Lauf abgestuerzt,
